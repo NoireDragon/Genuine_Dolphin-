@@ -1,0 +1,2083 @@
+:root{--black:#050606;--near-black:#0b0c0c;--charcoal:#171919;--white:#d9d7cc;--muted:#87877f;--red:#b72b2d;--red-dark:#5b1115;--rust:#7e3d34;--line:rgba(220,215,200,.17);--phosphor:#79c99a;--phosphor-dim:#4f8f70;--type:'IBM Plex Mono',Consolas,'Courier New',monospace;--display:'Share Tech Mono',Consolas,'IBM Plex Mono','Courier New',monospace;--screen-radius:25px}
+*{box-sizing:border-box}
+html{background:#020303;color:var(--white);min-height:100%;scroll-behavior:smooth}
+body{margin:0;background:#020303;color:var(--white);font-family:var(--type);letter-spacing:.015em;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid #e2d6c6;outline-offset:4px}
+[hidden]{display:none!important}
+.tv-frame{width:min(1440px,100%);height:min(890px,calc(100vh - 56px));min-height:620px;position:relative;padding:9px;border:1px solid #2a2c2b;border-radius:34px;background:linear-gradient(145deg,#333534 0%,#111312 22%,#252726 52%,#090a0a 100%);box-shadow:0 25px 70px #000, inset 0 0 0 2px #050606, inset 0 0 0 4px #2a2a27;}
+.tv-frame:before{content:"";position:absolute;inset:7px;border:1px solid #5c5c54;border-radius:29px;pointer-events:none;opacity:.25}
+.screen-glass{position:relative;isolation:isolate;overflow:hidden;width:100%;height:100%;border-radius:22px;background:#070909;box-shadow:inset 0 0 100px #000;display:flex;flex-direction:column}
+.screen-backdrop{position:absolute;inset:-4%;z-index:-3;background-size:cover;background-position:center;background-repeat:no-repeat;background:radial-gradient(ellipse at 50% 105%,rgba(70,59,44,.22),transparent 50%),linear-gradient(180deg,rgba(2,4,4,.68),rgba(4,5,5,.88) 54%,#030404),linear-gradient(90deg,rgba(0,0,0,.4),transparent 48%,rgba(0,0,0,.68));filter:grayscale(1) contrast(1.08) brightness(.43) sepia(.12);transform:scale(1.04);transition:filter 1.4s ease,transform 1.5s ease}
+body.horror-max .screen-backdrop{filter:grayscale(.65) contrast(1.7) brightness(.24) sepia(.35) hue-rotate(310deg);transform:scale(1.1) skewX(-.5deg)}
+body.credits-mode .screen-backdrop{filter:grayscale(1) contrast(.8) brightness(.19);transform:scale(1.01)}
+body.final-mode .screen-backdrop{filter:grayscale(1) contrast(1.6) brightness(.28) sepia(.4)}
+.boot-screen{position:relative;z-index:3;flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(16px,3vw,38px) clamp(18px,4vw,58px);animation:fade-in .8s both}
+.boot-center{width:min(560px,100%);margin:auto;text-align:center;padding:25px 0 38px}
+.seal{width:72px;height:72px;margin:0 auto 24px;border:1px solid rgba(210,207,192,.38);border-radius:50%;display:grid;place-items:center;position:relative;color:#aaa99f;font-size:23px;box-shadow:0 0 0 7px rgba(214,206,186,.03),0 0 0 14px rgba(214,206,186,.02)}
+.seal:before,.seal:after{content:"";position:absolute;inset:10px;border:1px dashed rgba(210,207,192,.28);border-radius:50%}.seal:after{inset:-7px;border-style:solid;transform:rotate(27deg) scaleX(.7)}.seal i{position:absolute;width:1px;height:90px;background:rgba(210,207,192,.16);transform:rotate(45deg)}
+h1,h2,h3,p{margin-top:0}
+.boot-tape-object{display:block;width:clamp(72px,12vw,126px);max-height:100px;object-fit:contain;margin:0 auto 22px;filter:drop-shadow(0 8px 12px rgba(0,0,0,.6));animation:tape-object-float 3.4s ease-in-out infinite}
+.boot-center h1{font-family:var(--display);font-weight:400;font-size:clamp(36px,7vw,68px);line-height:1;margin:0;letter-spacing:.045em;text-shadow:2px 0 rgba(163,30,31,.5),-2px 0 rgba(210,210,200,.15)}
+.action-button{border:1px solid rgba(220,215,200,.42);background:rgba(10,11,11,.8);padding:14px 22px;min-height:48px;letter-spacing:.11em;text-transform:uppercase;font-size:12px;transition:background .2s,border-color .2s,transform .2s;box-shadow:0 3px 0 #020303}
+.action-button:hover{background:rgba(82,14,17,.7);border-color:var(--red);transform:translateY(-1px)}
+.action-primary{border-color:rgba(200,63,63,.62);min-width:225px}
+.play-icon{color:#d25151;margin-right:12px}
+.app-shell{display:flex;flex:1;min-height:0;position:relative;z-index:2;flex-direction:column}
+.hud{flex:0 0 auto;height:74px;padding:0 clamp(15px,2.5vw,33px);border-bottom:1px solid rgba(220,215,200,.17);display:flex;align-items:center;gap:20px;justify-content:space-between;background:rgba(4,5,5,.62);backdrop-filter:blur(5px)}
+.hud-brand{display:flex;align-items:center;gap:11px;min-width:200px}.hud-brand strong{display:block;font-size:12px;letter-spacing:.08em;font-weight:400}.hud-readout{display:flex;align-items:center;gap:18px;font-size:11px;letter-spacing:.08em;color:#9d9d95}.audio-toggle{padding:8px 10px;border:1px solid rgba(220,215,200,.22);background:rgba(10,10,10,.4);font-size:10px;letter-spacing:.08em;color:#a3a39a;white-space:nowrap}.audio-toggle:hover{border-color:#8f4242;color:#e0d5c9}
+.scene{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(18px,3vw,42px);}
+.system-footer{height:36px;flex:0 0 auto;border-top:1px solid rgba(220,215,200,.14);background:rgba(3,4,4,.72);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(12px,2.5vw,28px);font-size:9px;letter-spacing:.1em;color:#92938a;gap:12px;z-index:4}
+.footer-center{display:flex;align-items:center;gap:11px}.progress-track{display:block;width:clamp(52px,9vw,125px);height:3px;background:#272a28;overflow:hidden}.progress-track i{display:block;height:100%;width:0;background:#9d292c;transition:width .5s}.archive-card{width:min(800px,100%);max-height:100%;overflow:auto;padding:clamp(20px,3vw,38px);background:linear-gradient(135deg,rgba(9,11,11,.83),rgba(12,13,13,.67));border:1px solid rgba(210,205,190,.2);box-shadow:0 20px 60px rgba(0,0,0,.32),inset 0 0 0 5px rgba(255,255,255,.012);position:relative;animation:fade-in .55s ease both;scrollbar-color:#4b2728 transparent;scrollbar-width:thin}
+.archive-card:before{content:"";position:absolute;inset:7px;border:1px solid rgba(220,215,200,.06);pointer-events:none}
+.archive-kicker{display:flex;align-items:center;justify-content:space-between;gap:14px;color:#8b8b82;font-size:10px;letter-spacing:.17em;margin-bottom:21px;text-transform:uppercase}
+.archive-card h2{font-family:var(--display);font-size:clamp(25px,4vw,42px);line-height:1.12;font-weight:400;margin:0 0 25px;color:#dedacf;letter-spacing:.018em}
+.archive-card h2 .red-text{color:#c14747}
+.story-copy{font-family:var(--type);font-size:clamp(14px,1.28vw,17px);line-height:1.8;color:#cbc9be;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:75ch}
+.story-copy + .story-copy{margin-top:.38em}
+.source-quote{border-left:1px solid #823032;padding-left:20px;margin-top:28px;color:#d0c9bb;font-family:var(--display);font-size:clamp(16px,1.8vw,20px);line-height:1.7;white-space:pre-wrap}
+.archive-actions{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-top:28px}
+.action-button.secondary{border-color:rgba(220,215,200,.22);color:#aaa99f;background:rgba(0,0,0,.28)}
+.action-button.danger{border-color:rgba(171,39,42,.65);color:#e2b7af}
+.choice-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.choice-button{min-width:135px;padding:14px 20px;border:1px solid rgba(220,215,200,.3);background:rgba(5,6,6,.78);text-transform:uppercase;letter-spacing:.15em;font-size:12px;transition:all .2s}
+.choice-button:hover{border-color:#be3d40;background:rgba(84,11,16,.45)}
+.small-note{font-size:10px;color:#92938a;line-height:1.65;letter-spacing:.04em;margin:18px 0 0}
+.scene-number{color:#b94b49;font-size:10px;letter-spacing:.19em}
+.cerchio-line{width:min(930px,100%);text-align:center;font-family:var(--display);font-size:clamp(27px,5.2vw,62px);line-height:1.17;letter-spacing:.025em;color:#dbd6c9;text-shadow:0 1px 0 #000,2px 0 rgba(176,37,41,.65),-2px 0 rgba(212,212,200,.2);animation:line-arrive .6s both;white-space:pre-wrap}
+.cerchio-line.final-cerchio{color:#d64242;font-size:clamp(37px,7vw,82px);font-weight:bold;letter-spacing:.05em;animation:final-title .95s steps(4,end) both;text-shadow:3px 0 #fff, -3px 0 #47090c,0 0 27px rgba(190,21,28,.6)}
+.scene-quiet .archive-card{background:rgba(4,5,5,.67);border-color:rgba(220,215,200,.1)}
+.loading-strip{height:2px;background:#30312e;margin:25px 0 0;overflow:hidden}.loading-strip i{height:100%;display:block;background:#af3333;animation:loadline 2s ease-in-out infinite alternate}
+.anomaly-toast{position:absolute;z-index:20;top:19%;left:50%;transform:translateX(-50%);padding:11px 16px;background:rgba(5,5,5,.92);border:1px solid #8f292d;color:#f2e7dc;font-size:clamp(11px,1.4vw,15px);letter-spacing:.15em;text-align:center;opacity:0;pointer-events:none;text-shadow:2px 0 #c22;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis}
+
+.eye-left{left:24%}.eye-right{right:24%}
+
+.screen-flash{position:absolute;inset:0;z-index:30;pointer-events:none;opacity:0;background:#e6dfd2;mix-blend-mode:screen}
+body.flash .screen-flash{animation:flash .22s steps(2,end)}
+.shutdown-overlay{position:absolute;z-index:50;inset:0;pointer-events:none;opacity:0;background:#000;display:flex;align-items:center;justify-content:center}
+.shutdown-line{height:1px;width:0;background:#eee;box-shadow:0 0 14px #fff}
+body.powering-off .shutdown-overlay{opacity:1;animation:crt-off .85s ease-in forwards}
+body.powering-off .shutdown-line{animation:crt-line .65s .06s ease-out forwards}
+body.powered-off .shutdown-overlay{opacity:1;background:#000}
+body.powered-off .shutdown-line{height:2px;width:0;opacity:0}
+
+@keyframes fade-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes rec-blink{0%,48%{opacity:1}49%,100%{opacity:.15}}
+@keyframes loadline{from{width:12%}to{width:85%}}
+@keyframes line-arrive{0%{opacity:0;filter:blur(4px);transform:translateY(12px)}100%{opacity:1;filter:blur(0);transform:translateY(0)}}
+@keyframes final-title{0%,15%,38%,60%,88%{opacity:.08;transform:skewX(15deg) scaleY(.88)}8%,20%,44%,70%,100%{opacity:1;transform:skewX(0) scaleY(1)}}
+@keyframes flash{0%{opacity:.85}100%{opacity:0}}
+
+
+@keyframes crt-off{0%{opacity:0}12%{opacity:1;background:#d5d3cb}25%{opacity:1;background:#080909}50%{opacity:1;background:#000}100%{opacity:1;background:#000}}
+@keyframes crt-line{0%{width:100%;height:100%;opacity:1}55%{width:100%;height:2px;opacity:1}85%{width:0;height:2px;opacity:1}100%{width:0;height:2px;opacity:0}}
+@media(max-width:760px){body{padding:7px}.tv-frame{height:calc(100dvh - 36px);min-height:570px;padding:5px;border-radius:20px}.screen-glass{border-radius:13px}.boot-screen{padding:15px}.hud{height:61px;gap:7px;padding:0 11px}.hud-brand{min-width:0;gap:7px}.hud-mark{width:29px;height:29px;font-size:12px}.hud-brand strong{font-size:10px}.hud-readout{gap:8px;font-size:9px}.hud-mode{display:none}.audio-toggle{font-size:9px;padding:7px}.scene{padding:13px}.system-footer{height:31px;padding:0 8px;font-size:8px}.footer-center{gap:5px}.progress-track{width:35px}.archive-card{padding:21px 17px}.archive-kicker{font-size:8px}.story-copy{font-size:13px;line-height:1.65}}
+@media(max-height:700px){.tv-frame{min-height:0;height:calc(100vh - 42px)}.boot-center{padding:12px 0 18px}.boot-center h1{font-size:clamp(33px,6vw,56px)}.hud{height:60px}.scene{padding-top:16px;padding-bottom:16px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+.credits-screen{width:min(840px,100%);height:100%;min-height:0;display:flex;flex-direction:column;position:relative;animation:fade-in .6s both}.credits-meta{display:flex;justify-content:space-between;gap:14px;padding:5px 0 12px;border-bottom:1px solid rgba(220,215,200,.16);font-size:9px;letter-spacing:.16em;color:#77776e;flex:0 0 auto}.credits-window{position:relative;overflow:hidden;flex:1;min-height:0;mask-image:linear-gradient(to bottom,transparent 0%,black 14%,black 85%,transparent 100%)}.credits-roll{position:absolute;top:0;left:0;right:0;text-align:center;padding:62vh 13px 48vh;animation:credits-roll var(--roll-duration,100s) linear forwards;animation-play-state:running}.credits-roll h2{font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.12em;font-size:clamp(25px,4vw,42px);line-height:1.24;margin:0 auto 40px;color:#ded8c9;text-shadow:0 2px 4px #000}.credits-copy-block{width:min(680px,100%);margin:0 auto}.credits-copy-block .story-copy{font-size:clamp(14px,1.35vw,17px);line-height:1.72;text-align:center;margin:0 auto 10px;color:#cbc7ba;max-width:68ch}.credits-copy-block .source-quote{margin:14px auto 10px;border:0;padding:0;font-family:var(--display);font-size:clamp(16px,1.8vw,21px);line-height:1.9;color:#d7cbbb;max-width:58ch}.credits-top-marker,.credits-bottom-marker{font-size:24px;color:#a44a42;letter-spacing:.7em;margin:0 auto 36px}.credits-bottom-marker{margin-top:45px}.credits-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0 2px;flex:0 0 auto}.credits-controls .action-button{min-width:0;min-height:36px;padding:9px 12px;font-size:9px}.credits-hint{font-size:9px;color:#92938a;text-align:center;letter-spacing:.04em}.credits-roll .credits-copy{font-size:clamp(14px,1.35vw,17px)}@keyframes credits-roll{0%{transform:translateY(0)}100%{transform:translateY(-100%)}}
+.final-end{width:min(680px,100%);text-align:center;z-index:3;position:relative;animation:fade-in .8s both}.final-topline{font-size:10px;letter-spacing:.25em;color:#8d8a80;margin-bottom:30px}.final-symbol{height:82px;width:82px;margin:0 auto 29px;border:1px solid rgba(193,52,54,.58);border-radius:50%;display:grid;place-items:center;color:#c14848;font-family:var(--display);font-size:30px;box-shadow:0 0 0 8px rgba(185,40,44,.04),0 0 42px rgba(175,16,26,.14)}.final-end h2{font-family:var(--display);font-weight:400;letter-spacing:.17em;font-size:clamp(28px,5vw,53px);color:#e2d9cb;margin-bottom:18px;text-shadow:2px 0 #9f2027,-2px 0 rgba(210,210,200,.1)}.final-end p{color:#8f342f;letter-spacing:.35em;font-size:12px;margin-bottom:28px}.done-end h2{font-size:clamp(24px,4vw,40px)}.done-end p{color:#77766d;letter-spacing:.08em;text-transform:none}.credits-screen .action-button:hover{border-color:#b34c4c}
+@media(max-width:760px){.credits-meta{font-size:7px}.credits-roll{padding-left:7px;padding-right:7px}.credits-copy-block .story-copy{font-size:13px;line-height:1.62;margin-bottom:9px}.credits-copy-block .source-quote{font-size:15px;line-height:1.55;margin:10px auto 8px}.credits-controls .action-button{padding:8px 8px;font-size:8px}.credits-hint{display:none}.credits-roll h2{font-size:25px;margin-bottom:25px}.final-symbol{height:60px;width:60px;font-size:23px;margin-bottom:22px}.final-topline{font-size:8px}}
+
+/* Piccolo effetto macchina da scrivere soltanto nelle schermate iniziali. */
+.scene-opening .archive-card h2{display:block;width:0;max-width:100%;overflow:hidden;white-space:nowrap;border-right:1px solid #a33b3b;animation:archive-type 1.25s steps(24,end) .12s forwards,caret-blink .72s steps(1,end) 5;}
+@keyframes archive-type{to{width:24ch;max-width:100%}}@keyframes caret-blink{0%,49%{border-color:#a33b3b}50%,100%{border-color:transparent}}
+.anomaly-toast.toast-in{animation:toast-pop 2.1s steps(1,end) forwards}
+@keyframes toast-pop{0%,4%{opacity:0;transform:translate(-50%,-5px)}8%,82%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,5px)}}
+.screen-flash.run-flash{animation:flash .22s steps(2,end)}
+
+/* Prima del jumpscare: atmosfera calda, domestica e volutamente rassicurante. */
+body.innocent-mode .screen-glass{background:#e4ddc8;box-shadow:inset 0 0 55px rgba(78,83,57,.13)}
+body.innocent-mode .screen-backdrop{background:radial-gradient(ellipse at 50% 108%,rgba(141,130,105,.28),transparent 52%),linear-gradient(135deg,rgba(236,231,208,.58),rgba(229,224,201,.73)),linear-gradient(90deg,rgba(255,250,232,.25),transparent 60%);filter:grayscale(.18) contrast(.84) brightness(.94) sepia(.18);transform:scale(1.02)}
+body.innocent-mode .scanlines{opacity:.045}
+body.innocent-mode .film-grain{opacity:.022;animation-duration:.5s}
+body.innocent-mode .vignette{opacity:.2}
+body.innocent-mode .tracking-band{opacity:.035;animation-duration:16s}
+body.innocent-mode .boot-center h1{color:#37412e;text-shadow:1px 0 rgba(255,255,240,.5),-1px 0 rgba(84,110,67,.08)}
+body.innocent-mode .action-button{background:rgba(247,243,227,.82);color:#46513b;border-color:rgba(86,107,67,.4);box-shadow:0 3px 0 rgba(78,87,62,.12)}
+body.innocent-mode .action-button:hover{background:#edf0dc;border-color:#80966a}
+body.innocent-mode .action-primary{border-color:rgba(107,133,80,.58)}
+body.innocent-mode .play-icon{color:#6c8654}
+body.innocent-mode .hud{background:rgba(241,236,216,.88);border-color:rgba(73,88,57,.18)}
+body.innocent-mode .hud-brand strong{color:#3e4935}
+body.innocent-mode .hud-brand small,body.innocent-mode .hud-readout,body.innocent-mode .hud-mode{color:#737963}
+body.innocent-mode .audio-toggle{background:rgba(249,246,232,.75);border-color:rgba(78,96,60,.23);color:#4d5a3f}
+body.innocent-mode .scene{color:#3e4735}
+body.innocent-mode .archive-card{background:linear-gradient(135deg,rgba(247,243,225,.92),rgba(237,232,211,.87));border-color:rgba(83,100,64,.22);box-shadow:0 20px 60px rgba(48,53,37,.13),inset 0 0 0 5px rgba(255,255,255,.16)}
+body.innocent-mode .archive-card:before{border-color:rgba(83,100,64,.09)}
+body.innocent-mode .archive-kicker,body.innocent-mode .scene-number{color:#73815f}
+body.innocent-mode .archive-card h2{color:#394530;text-shadow:none}
+body.innocent-mode .story-copy{color:#49523f}
+body.innocent-mode .small-note{color:#767d66}
+body.innocent-mode .choice-button{color:#45503a;background:rgba(246,243,226,.9);border-color:rgba(83,102,64,.28)}
+body.innocent-mode .choice-button:hover{border-color:#8ca073;background:rgba(230,235,213,.92)}
+body.innocent-mode .system-footer{background:rgba(239,234,214,.95);border-color:rgba(83,100,64,.19);color:#747b65}
+body.innocent-mode .progress-track{background:#d1d0b9}
+body.innocent-mode .progress-track i{background:#84956b}
+
+body.innocent-mode .screen-glass:after{opacity:.12}
+
+/* Dal jumpscare in poi: il nastro perde il calore iniziale e si guasta. */
+body.horror-awakened .screen-backdrop{filter:grayscale(1) contrast(1.55) brightness(.2) sepia(.34) hue-rotate(306deg);transform:scale(1.08) skewX(-.35deg)}
+body.horror-awakened .scanlines{opacity:.27}
+body.horror-awakened .film-grain{opacity:.095;animation-duration:.13s}
+body.horror-awakened .tracking-band{opacity:.55;animation-duration:2.3s}
+body.horror-awakened .hud{border-bottom-color:rgba(177,40,43,.35)}
+body.horror-awakened .screen-glass{animation:awakening-jolt .72s steps(2,end) both}
+@keyframes awakening-jolt{0%{transform:translate(0);filter:none}18%{transform:translate(-4px,1px) skewX(1deg);filter:contrast(2)}34%{transform:translate(5px,-1px);filter:brightness(1.6) hue-rotate(45deg)}52%{transform:translate(-2px,0);filter:contrast(2.1)}70%{transform:translate(2px,0)}100%{transform:translate(0);filter:none}}
+
+@media(max-width:760px){
+  .tv-frame{height:calc(100dvh - 36px);min-height:0;width:100%}
+  .scene{overscroll-behavior:contain}
+  .archive-card{max-height:100%;scrollbar-gutter:stable}
+  .system-footer #statusRight{display:none}
+  .system-footer{grid-template-columns:minmax(0,1fr) auto;display:grid;gap:5px}
+  .system-footer>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .footer-center{justify-self:end;gap:5px}
+  .credits-controls .action-button{min-height:44px;font-size:9px}
+}
+@media(max-height:700px){.tv-frame{height:calc(100dvh - 42px);min-height:0}}
+@media(max-width:380px){
+  
+  .hud{gap:5px;padding:0 7px}
+  .hud-brand{gap:5px}
+  .hud-brand small{display:none}
+  .hud-readout{gap:5px;font-size:8px}
+  .audio-toggle{font-size:7px;padding:7px 5px}
+  .system-footer{font-size:6px;letter-spacing:.03em}
+  .progress-track{width:27px}
+}
+body.innocent-mode .scene-opening .archive-card h2{animation:archive-type-innocent 1.25s steps(24,end) .12s forwards,caret-blink-innocent .72s steps(1,end) 5;border-right-color:#72895b}
+@keyframes archive-type-innocent{to{width:24ch;max-width:100%}}
+@keyframes caret-blink-innocent{0%,49%{border-color:#72895b}50%,100%{border-color:transparent}}
+
+body:has(.credits-screen) .system-footer #statusLeft, body:has(.credits-screen) .system-footer #statusRight { display:none; }
+body:has(.credits-screen) .system-footer { justify-content:center; }
+
+/* Interfaccia pulita: niente etichette tecniche sotto le scene. */
+.system-footer #statusLeft,.system-footer #statusRight,.system-footer #progressLabel{display:none!important}
+.system-footer{justify-content:center}
+.boot-meta{font-size:10px;letter-spacing:.18em;text-align:center;color:#77796d}
+body.innocent-mode .boot-meta{color:#68705b}
+.reading-confirmation{font-family:var(--display);font-size:clamp(24px,4vw,42px);letter-spacing:.04em;text-align:center;color:var(--white);animation:confirm-appear .65s ease both}
+body.innocent-mode .reading-confirmation{color:#394530}
+@keyframes confirm-appear{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+.centered-actions{justify-content:center}
+@media(max-width:430px){.boot-center h1{font-size:clamp(25px,7vw,31px);letter-spacing:.02em;white-space:nowrap}.boot-center{width:100%}}
+
+
+/* Rifinitura richiesta: timer centrato e leggermente più leggibile. */
+.hud{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  column-gap:8px;
+  row-gap:0;
+}
+.hud-brand{justify-self:start;min-width:0;}
+.hud-readout{
+  justify-self:center;
+  position:static;
+  transform:none;
+  gap:8px;
+  font-size:14px;
+  line-height:1;
+  letter-spacing:.12em;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.audio-toggle{justify-self:end;}
+
+/* La risata non deve mai uscire dai bordi, neanche sugli schermi stretti. */
+.cerchio-line{
+  min-width:0;
+  max-width:100%;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+.cerchio-line.long-laugh{
+  width:100%;
+  max-width:100%;
+  padding-inline:5px;
+  font-size:clamp(16px,3.2vw,44px);
+  line-height:1.2;
+  letter-spacing:.01em;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+/* Dal momento della risata fino a CERCHIO HORROR: rosso sangue. */
+.cerchio-line.blood-red-line{
+  color:#ad101b!important;
+  text-shadow:0 0 7px rgba(166,0,12,.58),0 0 22px rgba(115,0,0,.38),1px 0 #450006,-1px 0 rgba(235,48,55,.55);
+}
+.cerchio-line.final-cerchio.blood-red-line{
+  color:#b20d18!important;
+  text-shadow:0 0 7px rgba(180,0,12,.78),0 0 24px rgba(125,0,0,.58),2px 0 #490006,-2px 0 rgba(235,48,55,.65);
+}
+
+@media(max-width:760px){
+  .hud{column-gap:5px;padding-left:9px;padding-right:9px;}
+  .hud-readout{font-size:12px;letter-spacing:.08em;}
+  .hud-brand strong{font-size:9px;letter-spacing:.04em;}
+}
+@media(max-width:380px){
+  .hud{column-gap:3px;padding-left:6px;padding-right:6px;}
+  .hud-readout{font-size:11px;letter-spacing:.04em;}
+  .hud-brand strong{font-size:8px;letter-spacing:0;}
+  .audio-toggle{font-size:7px;padding:7px 4px;}
+  .cerchio-line.long-laugh{font-size:16px;letter-spacing:0;}
+}
+
+/* Testi narrativi: digitazione progressiva senza riquadro dietro. */
+.archive-card.narrative-card,
+body.innocent-mode .archive-card.narrative-card{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  padding:clamp(8px,2vh,20px) clamp(8px,2.2vw,24px);
+}
+.archive-card.narrative-card:before{display:none!important;content:none!important}
+.archive-card.narrative-card .story-copy{max-width:78ch;margin-left:auto;margin-right:auto;color:inherit}
+body.innocent-mode .archive-card.narrative-card .story-copy{color:#49523f}
+.typewriter-target{white-space:inherit}
+.typewriter-target.typing-active:after{
+  content:"";display:inline-block;width:.48em;height:1em;margin-left:.08em;vertical-align:-.12em;
+  background:currentColor;opacity:.85;animation:typewriter-caret .72s steps(1,end) infinite;
+}
+.typewriter-target.typing-complete:after{content:none;display:none}
+@keyframes typewriter-caret{0%,49%{opacity:.85}50%,100%{opacity:0}}
+.scene.typewriting .archive-actions,
+.scene.typewriting .credits-controls{visibility:hidden;pointer-events:none}
+.scene.typewriting .cerchio-line{animation:none}
+
+.cerchio-line .typewriter-target{display:inline;white-space:inherit;overflow-wrap:inherit}
+@media(max-width:760px){
+  .archive-card.narrative-card{padding:8px 5px}
+  
+  
+}
+
+
+/* Saluti finali: lettura centrale, spazio dedicato al testo e pulsante disponibile solo al termine. */
+.saluti-typewriter-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;width:min(850px,100%);height:100%;min-height:0;margin:auto;}
+.saluti-typewriter-window{flex:1 1 auto;min-height:0;width:100%;overflow:auto;overscroll-behavior:contain;padding:clamp(10px,3vh,32px) clamp(10px,2.8vw,24px);scrollbar-width:thin;scrollbar-color:#663334 transparent;}
+.saluti-typewriter-copy{width:min(700px,100%);margin:0 auto;font-family:var(--type);font-size:clamp(14px,1.4vw,18px);line-height:1.9;text-align:center;color:#d5cdbf;white-space:pre-wrap;overflow-wrap:anywhere;}
+.saluti-typewriter-screen .credits-controls{width:100%;justify-content:center;flex:0 0 auto;padding:8px 0 2px;}
+.saluti-typewriter-screen .credits-controls .action-button{min-width:140px;font-size:11px;}
+@media(max-width:760px){.saluti-typewriter-copy{font-size:13px;line-height:1.75}.saluti-typewriter-screen .credits-controls .action-button{min-height:40px;font-size:10px}}
+
+/* Nastro in riproduzione: piccoli disturbi da VHS, senza numeri di capitolo. */
+.scene.tape-playback{animation:tape-scene-lock .42s steps(4,end) both}
+.scene.tape-playback:before{content:none;display:none}
+.scene.tape-playback:after{content:"";position:absolute;z-index:7;left:0;right:0;top:-12%;height:2px;background:rgba(229,229,215,.2);box-shadow:0 0 13px rgba(229,229,215,.22);pointer-events:none;animation:tape-head-pass 4.8s linear infinite}
+.scene.tape-playback .archive-card{animation:tape-card-sync .48s steps(3,end) both}
+@keyframes tape-scene-lock{0%{opacity:.2;filter:brightness(1.8) contrast(1.4);transform:translateX(3px)}35%{opacity:.86;filter:brightness(.78);transform:translateX(-2px)}70%{opacity:.7;transform:translateX(1px)}100%{opacity:1;filter:none;transform:none}}
+@keyframes tape-card-sync{0%{filter:blur(1px);transform:translateY(2px)}35%{filter:blur(0);transform:translateY(-1px)}100%{filter:none;transform:none}}
+@keyframes tape-osd-flicker{0%,92%,100%{opacity:.6}94%{opacity:.12}96%{opacity:.8}}
+@keyframes tape-head-pass{0%{top:-12%;opacity:0}10%{opacity:.45}90%{opacity:.25}100%{top:112%;opacity:0}}
+@keyframes tape-object-float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-4px) rotate(1deg)}}
+.game-intro-screen{position:relative;width:100%;height:100%;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(18px,4vh,36px);text-align:center;background:#020303;animation:game-intro-fade 2.85s ease both;isolation:isolate}
+.game-intro-screen:before{content:"";position:absolute;inset:0;z-index:-1;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.022) 0 1px,transparent 1px 4px);opacity:.42;pointer-events:none}
+.game-intro-label{max-width:90%;margin:0;color:#b8b8b1;font-family:var(--display);font-size:clamp(24px,4.2vw,46px);line-height:1.35;letter-spacing:.02em;text-shadow:2px 0 rgba(135,25,25,.25);animation:game-title-arrive 2.85s ease both}
+.game-intro-sprite{display:block;max-width:min(44vw,310px);max-height:min(36vh,250px);width:auto;height:auto;object-fit:contain;opacity:0;filter:grayscale(.75) brightness(.6);animation:game-art-arrive 2.85s ease both}
+.game-intro-screen:not(.has-game-sprite) .game-intro-label{margin-top:0}
+@keyframes game-intro-fade{0%{opacity:0}12%{opacity:1}76%{opacity:1}100%{opacity:0}}
+@keyframes game-title-arrive{0%{opacity:0;filter:blur(2px)}13%{opacity:1;filter:blur(0)}76%{opacity:1}100%{opacity:0}}
+@keyframes game-art-arrive{0%,10%{opacity:0;transform:translateY(5px)}23%,74%{opacity:.8;transform:translateY(0)}100%{opacity:0;transform:translateY(-3px)}}
+@media(prefers-reduced-motion:reduce){.scene.tape-playback,.scene.tape-playback .archive-card,.boot-tape-object{animation-duration:.01ms!important;animation-iteration-count:1!important}.game-intro-screen,.game-intro-label{animation:none!important;opacity:1!important}.game-intro-sprite{animation:none!important;opacity:.8!important}}
+@media(max-width:760px){.scene.tape-playback:before{font-size:8px}.game-intro-label{font-size:clamp(22px,6vw,32px)}.game-intro-sprite{max-width:60vw;max-height:28vh}}
+
+/* Digita più lentamente e consente di leggere le frasi mentre compaiono. */
+.typewriter-target{text-wrap:pretty}
+.scene.tape-playback:after{animation-duration:5.6s}
+
+.scene.tape-playback:before{content:none!important;display:none!important}
+
+/* Finale sereno: palette intermedia tra i toni caldi iniziali e quelli scuri dell'horror. */
+body.peaceful-ending-mode {--white:#d7d2bf;--muted:#aaa694;--red:#81565c;--red-dark:#493c3a;color:#d7d2bf;background:#171916;}
+body.peaceful-ending-mode .screen-glass{background:#46483f;box-shadow:inset 0 0 90px rgba(9,11,10,.58)}
+body.peaceful-ending-mode .screen-backdrop{background:radial-gradient(ellipse at 22% 92%,rgba(135,143,105,.25),transparent 59%),radial-gradient(ellipse at 77% 8%,rgba(109,66,78,.24),transparent 58%),linear-gradient(135deg,rgba(111,118,92,.22),rgba(50,49,46,.6) 54%,rgba(28,29,28,.86));filter:grayscale(.26) contrast(.94) brightness(.63) sepia(.13);transform:scale(1.025);}
+body.peaceful-ending-mode .scanlines{opacity:.08}
+body.peaceful-ending-mode .film-grain{opacity:.035;animation-duration:.42s}
+body.peaceful-ending-mode .vignette{opacity:.38}
+body.peaceful-ending-mode .tracking-band{opacity:.12;animation-duration:13s}
+body.peaceful-ending-mode .hud{background:rgba(66,69,59,.83);border-color:rgba(210,206,184,.18)}
+body.peaceful-ending-mode .hud-brand strong,body.peaceful-ending-mode .hud-readout{color:#d3d0bc}
+body.peaceful-ending-mode .audio-toggle{background:rgba(74,77,64,.72);border-color:rgba(205,204,178,.23);color:#d5d1bb}
+body.peaceful-ending-mode .system-footer{background:rgba(57,60,51,.9);border-color:rgba(205,204,178,.2);color:#c0bda9}
+body.peaceful-ending-mode .progress-track{background:#5a5e4d}
+body.peaceful-ending-mode .progress-track i{background:#a39b7b}
+body.peaceful-ending-mode .scene{color:#d7d2bf}
+body.peaceful-ending-mode .archive-card{background:linear-gradient(135deg,rgba(96,98,80,.76),rgba(60,61,56,.92));border-color:rgba(208,203,180,.2);box-shadow:0 20px 60px rgba(13,14,12,.22),inset 0 0 0 5px rgba(255,255,255,.025)}
+body.peaceful-ending-mode .story-copy,body.peaceful-ending-mode .credits-copy-block .story-copy{color:#d4cfbd}
+body.peaceful-ending-mode .archive-card h2,body.peaceful-ending-mode .credits-roll h2{color:#e0dac8;text-shadow:none}
+body.peaceful-ending-mode .action-button{background:rgba(73,75,63,.82);color:#e1dbc7;border-color:rgba(210,205,181,.34);box-shadow:0 3px 0 rgba(12,13,11,.32)}
+body.peaceful-ending-mode .action-button:hover{background:rgba(93,96,77,.92);border-color:rgba(220,216,190,.55)}
+
+body.peaceful-ending-mode .final-end h2{color:#e0dac8;text-shadow:none;letter-spacing:.12em}
+body.peaceful-ending-mode .final-end .calm-final-kicker{margin:0 0 22px;color:#c4c3ad;font-size:10px;letter-spacing:.26em}
+body.peaceful-ending-mode .final-end .calm-final-message{margin:16px 0 34px;color:#d5d1bd;font-size:clamp(15px,1.8vw,20px);letter-spacing:.07em;text-transform:none}
+body.peaceful-ending-mode .final-end .action-button{border-color:rgba(210,205,181,.36)}
+
+/* Rifiniture di usabilità: focus visibile, testo leggibile e movimento ridotto rispettato. */
+.action-button:focus-visible,.audio-toggle:focus-visible{outline:2px solid #e4d7c2;outline-offset:4px;}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+}
+
+
+/* Typografia tecnica e accenti discreti, coerenti con l'estetica VHS. */
+.hud-brand strong,.hud-readout,.system-footer,.archive-kicker,.scene-number,.game-runtime-label,.game-runtime-caption{font-family:var(--display);letter-spacing:.12em;}
+.hud-readout{color:rgba(153,205,168,.76);font-variant-numeric:tabular-nums;}
+.progress-track i{background:linear-gradient(90deg,var(--phosphor-dim),var(--phosphor));}
+body.horror-awakened .progress-track i,body.horror-max .progress-track i{background:linear-gradient(90deg,#751d22,#da3937);}
+.action-button{border-radius:0;}
+.action-button:focus-visible{outline-color:var(--phosphor);}
+
+@media(max-width:760px){body{padding:4px;min-height:100dvh}.tv-frame{width:100%;height:calc(100dvh - 8px);min-height:0;max-height:calc(100dvh - 8px);padding:4px;border-radius:16px}.tv-frame:before{inset:4px;border-radius:13px}.screen-glass{border-radius:10px}.hud{height:54px;min-height:54px;padding:0 9px;gap:7px}.hud-brand strong{font-size:clamp(8px,2.3vw,10px);letter-spacing:.03em}.hud-readout{font-size:11px;letter-spacing:.07em}.audio-toggle{font-size:8px;padding:6px}.scene{padding:10px;overflow-y:auto;overscroll-behavior:contain}.system-footer{height:27px;min-height:27px}.footer-center{gap:0}.progress-track{width:min(22vw,80px)}}
+@media(max-width:380px){.hud{padding-inline:5px;gap:4px}.hud-brand strong{font-size:8px}.hud-readout{font-size:10px}.audio-toggle{font-size:7px;padding:5px 4px}.scene{padding:7px}.action-button{padding:11px 14px;min-height:43px;font-size:10px}.archive-actions{gap:7px;margin-top:18px}}
+@media(orientation:landscape) and (max-height:500px){.tv-frame{height:calc(100dvh - 8px);min-height:0}.hud{height:42px;min-height:42px}.scene{padding:7px}.system-footer{height:24px;min-height:24px}.game-runtime{padding:12px!important}.game-runtime-clock{font-size:clamp(28px,7vh,48px)!important}}
+
+/* Timer reale del gioco: avanza fino al click su CONCLUDI; non salta la scena da solo. */
+.game-runtime{position:relative;width:min(690px,100%);margin:auto;padding:clamp(24px,5vw,50px) clamp(18px,4vw,40px);text-align:center;background:linear-gradient(135deg,rgba(4,10,7,.94),rgba(12,17,14,.91));border:1px solid rgba(112,189,142,.36);box-shadow:0 18px 60px rgba(0,0,0,.4),inset 0 0 0 4px rgba(255,255,255,.012);overflow:hidden;}
+.game-runtime:before{content:"";position:absolute;inset:11px;border:1px solid rgba(121,201,154,.09);pointer-events:none;}
+.game-runtime-topline{display:flex;justify-content:space-between;gap:12px;color:#7ab891;font-size:clamp(8px,1vw,10px);text-align:left;}
+.game-runtime-topline #gameMinuteTick{color:#6cae85;white-space:nowrap;}
+.game-runtime-label{margin:clamp(24px,4vh,40px) 0 16px;color:#a9b8a8;font-size:clamp(10px,1.35vw,13px);}
+.game-runtime-clock{margin:0;color:#d8e2d3;font:400 clamp(54px,10vw,100px)/1 var(--display);letter-spacing:.1em;font-variant-numeric:tabular-nums;text-shadow:0 0 20px rgba(117,220,156,.11);}
+.game-runtime-caption{margin:14px 0 28px;color:#658c73;font-size:10px;letter-spacing:.22em;}
+.game-runtime-signal{height:18px;display:flex;justify-content:center;align-items:flex-end;gap:4px;margin:0 auto 24px;opacity:.6;}
+.game-runtime-signal i{display:block;width:4px;height:6px;background:#5c9a71;animation:signal-bars .8s steps(2,end) infinite alternate;}
+.game-runtime-signal i:nth-child(3n){height:14px;animation-delay:-.22s}.game-runtime-signal i:nth-child(4n){height:10px;animation-delay:-.42s}.game-runtime-signal i:nth-child(2n){animation-delay:-.12s;}
+.game-runtime .archive-actions{margin-top:30px;position:relative;z-index:2;}
+.game-runtime .action-primary{border-color:rgba(121,201,154,.55);color:#c8dfcc;background:rgba(18,42,28,.68);}
+.game-runtime .action-primary:hover{background:rgba(27,64,42,.85);border-color:#79c99a;}
+@keyframes signal-bars{from{opacity:.3;transform:scaleY(.6)}to{opacity:.8;transform:scaleY(1)}}
+body.game-mode .screen-backdrop{filter:grayscale(.55) contrast(1.2) brightness(.28) sepia(.15);}
+@media(prefers-reduced-motion:reduce){.game-runtime-signal i{animation:none!important;opacity:.5}}
+
+
+/* Scelte: interferenza horror ambientale, sempre dietro al testo e senza lampeggiare le parole. */
+body.credits-mode .scene{isolation:isolate;}
+body.credits-mode .scene:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.19;background:repeating-linear-gradient(to bottom,rgba(220,225,214,.075) 0 1px,transparent 1px 4px),radial-gradient(ellipse at 50% 50%,transparent 45%,rgba(105,9,16,.22) 100%);mix-blend-mode:screen;animation:choice-signal-waver 6.8s linear infinite;}
+body.credits-mode .scene:after{content:"";position:absolute;z-index:0;pointer-events:none;left:0;right:0;top:-22%;height:19%;opacity:.42;background:linear-gradient(to bottom,transparent,rgba(139,16,23,.12),rgba(205,33,40,.08),transparent);animation:choice-scan-drift 8.5s linear infinite;}
+body.credits-mode .scene>*{position:relative;z-index:1;}
+body.credits-mode .credits-screen{filter:none;}
+body.credits-mode .credits-window{border-color:rgba(132,43,43,.32);box-shadow:inset 0 0 35px rgba(65,5,8,.12),0 0 18px rgba(117,9,15,.06);}
+body.credits-mode .credits-roll h2{text-shadow:1px 0 rgba(147,29,33,.14);}
+@keyframes choice-signal-waver{0%,91%,100%{opacity:.15;transform:translateY(0)}92%{opacity:.26;transform:translateY(-2px)}94%{opacity:.12;transform:translateY(1px)}96%{opacity:.22;transform:translateY(0)}}
+@keyframes choice-scan-drift{0%{transform:translateY(0)}100%{transform:translateY(680%)}}
+@media(prefers-reduced-motion:reduce){body.credits-mode .scene:before,body.credits-mode .scene:after{animation:none!important;opacity:.09}}
+
+/* Pulsante CONCLUDI subito disponibile nella schermata di gioco. */
+.game-runtime{gap:clamp(12px,2.2vh,22px)}
+.game-runtime .game-finish-actions{margin-top:6px;margin-bottom:5px}
+.game-runtime .game-runtime-label{text-transform:uppercase;max-width:94%;text-align:center}
+@media(max-width:560px){.game-runtime .game-finish-actions{margin-top:4px}.game-runtime .game-runtime-clock{font-size:clamp(48px,15vw,72px)}}
+
+/* Fondali caricati da assets/img/. */
+.screen-backdrop{background-size:cover;background-position:center;background-repeat:no-repeat;}
+
+/* Nessuna lineetta decorativa sotto il titolo iniziale. */
+#bootTitle::before,#bootTitle::after,.boot-center::before,.boot-center::after{content:none!important;display:none!important;border:0!important;box-shadow:none!important}
+#bootTitle{border:0!important;text-decoration:none!important;background-image:none!important}
+/* Il pulsante iniziale non deve sembrare una lineetta verde sotto il titolo. */
+#bootScreen #playTape{border-color:rgba(85,78,65,.38)!important;box-shadow:0 3px 0 rgba(60,55,42,.08)!important}
+#bootScreen #playTape .play-icon{color:#80745f!important}
+
+/* La risata maiuscola trema solo nella schermata dedicata. */
+.cerchio-line.long-laugh{animation:partenza-laugh-tremble .075s steps(2,end) infinite;}
+@keyframes partenza-laugh-tremble{
+  0%,100%{transform:translate(0,0) skewX(0deg)}
+  20%{transform:translate(-2px,1px) skewX(-.5deg)}
+  40%{transform:translate(2px,-1px) skewX(.6deg)}
+  60%{transform:translate(-1px,-1px) skewX(-.3deg)}
+  80%{transform:translate(1px,2px) skewX(.4deg)}
+}
+.scene.typewriting .cerchio-line:not(.long-laugh){animation:none}
+@media(prefers-reduced-motion:reduce){.cerchio-line.long-laugh{animation:none!important}}
+
+
+/* REVISIONE HORROR: leggibilita, HUD minimale, immagini integre */
+:root{--type:'IBM Plex Mono',Consolas,'Courier New',monospace;--display:'Share Tech Mono',Consolas,'Lucida Console',monospace;--copy:#f0e8d8;--amber:#edc27d;--amber-bright:#ffe0a4;--alert:#d66c67;--panel:rgba(5,7,8,.88)}
+html,body{color:var(--copy)}
+.screen-backdrop{inset:0!important;z-index:-3!important;background-color:#050606!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;filter:none!important;transform:none!important;transition:none!important}
+body.innocent-mode .screen-backdrop,body.horror-awakened .screen-backdrop,body.horror-max .screen-backdrop,body.credits-mode .screen-backdrop,body.final-mode .screen-backdrop,body.game-mode .screen-backdrop,body.peaceful-ending-mode .screen-backdrop,body.glitch-burst .screen-backdrop{filter:none!important;transform:none!important}
+.hud{height:48px!important;min-height:48px!important;flex:0 0 48px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;border:0!important;background:rgba(3,4,5,.34)!important;backdrop-filter:none!important;box-shadow:none!important}
+.hud-brand,.audio-toggle{display:none!important}
+.hud-readout{margin:0 auto!important;justify-content:center!important;gap:0!important;color:var(--amber-bright)!important;font-family:var(--display)!important;font-size:clamp(13px,1.55vw,17px)!important;letter-spacing:.2em!important;font-variant-numeric:tabular-nums!important;text-shadow:0 2px 8px #000,0 0 18px rgba(237,194,125,.18)!important}
+.system-footer{display:none!important;height:0!important;min-height:0!important;border:0!important}
+.scene{padding:clamp(14px,3vw,38px)!important;color:var(--copy)!important}
+.archive-card{background:linear-gradient(145deg,rgba(4,6,7,.92),rgba(9,10,11,.86))!important;border:1px solid rgba(237,194,125,.34)!important;box-shadow:0 22px 70px rgba(0,0,0,.62),inset 0 0 0 1px rgba(255,224,164,.04)!important;backdrop-filter:blur(3px)}
+.archive-card:before{border-color:rgba(237,194,125,.08)!important}
+.archive-card h2,.credits-roll h2{color:var(--amber-bright)!important;text-shadow:0 2px 8px #000,0 0 18px rgba(237,194,125,.12)!important}
+.story-copy,.credits-copy-block .story-copy{color:var(--copy)!important;text-shadow:0 1px 3px #000!important;font-size:clamp(14px,1.3vw,17px)!important;line-height:1.82!important}
+.source-quote,.credits-copy-block .source-quote{color:#f5d6a5!important;border-color:var(--alert)!important;text-shadow:0 1px 4px #000!important}
+.credits-window,.saluti-typewriter-window{text-shadow:0 1px 5px #000}
+.credits-roll h2{color:var(--amber-bright)!important}.credits-copy-block .story-copy{color:var(--copy)!important}
+.action-button,.choice-button{color:var(--amber-bright)!important;background:rgba(5,7,8,.94)!important;border:1px solid rgba(237,194,125,.66)!important;box-shadow:0 3px 0 rgba(0,0,0,.85),0 0 14px rgba(237,194,125,.07)!important;text-shadow:0 1px 3px #000!important}
+.action-button:hover,.choice-button:hover{color:#17120b!important;background:var(--amber)!important;border-color:var(--amber-bright)!important;text-shadow:none!important}
+.action-button.secondary{color:#f1e5d1!important;border-color:rgba(237,194,125,.34)!important}.action-button.danger{color:#ffb2a9!important;border-color:rgba(214,108,103,.78)!important}
+.action-button:focus-visible,.choice-button:focus-visible{outline:2px solid var(--amber-bright)!important;outline-offset:4px}
+.cerchio-line{color:#f6ead9!important;text-shadow:0 2px 10px #000,0 0 18px rgba(237,194,125,.12)!important}
+.cerchio-line.blood-red-line,.cerchio-line.final-cerchio{color:#ff7770!important;text-shadow:0 2px 9px #000,0 0 22px rgba(190,35,35,.48)!important}
+.game-runtime{background:rgba(4,6,7,.68)!important;border-color:rgba(237,194,125,.58)!important;box-shadow:0 20px 65px rgba(0,0,0,.48),inset 0 0 0 1px rgba(255,224,164,.06)!important;backdrop-filter:blur(2px)}
+.game-runtime:before{border-color:rgba(237,194,125,.16)!important}.game-runtime-label{color:#f1d8ad!important;text-shadow:0 2px 6px #000!important}
+.game-runtime-clock{color:#ffe0a4!important;text-shadow:0 2px 10px #000,0 0 24px rgba(237,194,125,.2)!important}.game-runtime-caption{color:#dfbd85!important}
+.game-runtime .action-primary{color:var(--amber-bright)!important;border-color:rgba(237,194,125,.8)!important}.game-runtime-signal i{background:#d4a96b!important}
+.game-intro-label{color:var(--amber-bright)!important;text-shadow:0 2px 10px #000!important}.game-intro-sprite{filter:none!important;object-fit:contain!important;object-position:center!important;max-width:min(70vw,760px)!important;max-height:38vh!important}
+/* Il PNG del mostro resta senza filtri: tremolio e glitch agiscono sul monitor e sul fondale. */
+.jumpscare-overlay{background:#000!important;animation:none!important;transform:none!important}
+.jumpscare-red-light,.jumpscare-crt{display:none!important;content:none!important}
+.jumpscare-sprite{display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center!important;filter:none!important;mix-blend-mode:normal!important;animation:none!important;box-shadow:none!important}
+body.jumpscare-active .jumpscare-overlay{display:block!important;animation:none!important}
+body.jumpscare-active .app-shell,body.jumpscare-active .screen-flash{visibility:hidden!important}
+/* ================================================================
+   PARTENZA LUDOVICO — SISTEMA VISIVO FINALE
+   Schermo 1920:1018, palette monocromatica, testo ad alto contrasto.
+   ================================================================ */
+:root{
+  --black:#050505;
+  --near-black:#0b0b0b;
+  --charcoal:#151515;
+  --white:#f5f5f2;
+  --copy:#f2f2ee;
+  --muted:#c1c1bd;
+  --line:rgba(245,245,242,.30);
+  --panel:rgba(5,5,5,.94);
+  --type:Arial,Helvetica,sans-serif;
+  --display:"Arial Black",Arial,Helvetica,sans-serif;
+  --screen-radius:7px;
+}
+html,body{background:#000!important;color:var(--white)!important;font-family:var(--type)!important;font-weight:700!important;}
+body{min-height:100dvh;padding:12px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow-x:hidden!important;overflow-y:auto!important;}
+.tv-frame{
+  width:min(calc(100vw - 24px),calc((100dvh - 24px)*1.88605108))!important;
+  height:auto!important;aspect-ratio:1920/1018!important;min-height:0!important;max-height:none!important;
+  padding:0!important;border:1px solid #747474!important;border-radius:8px!important;
+  background:#050505!important;box-shadow:0 16px 55px #000,0 0 0 1px #202020!important;
+}
+.tv-frame:before{display:none!important}
+.screen-glass{width:100%!important;height:100%!important;aspect-ratio:1920/1018!important;border-radius:7px!important;background:#050505!important;box-shadow:none!important;}
+.screen-backdrop{
+  position:absolute!important;inset:0!important;z-index:0!important;
+  background-color:#080808!important;background-size:100% 100%!important;
+  background-position:center!important;background-repeat:no-repeat!important;
+  filter:none!important;transform:none!important;transition:none!important;
+}
+body.innocent-mode .screen-backdrop,body.horror-awakened .screen-backdrop,body.horror-max .screen-backdrop,
+body.credits-mode .screen-backdrop,body.final-mode .screen-backdrop,body.game-mode .screen-backdrop,
+body.peaceful-ending-mode .screen-backdrop,body.glitch-burst .screen-backdrop{filter:none!important;transform:none!important;}
+.boot-screen,.app-shell{position:relative!important;z-index:2!important;}
+.crt-layer{z-index:12!important;}
+.scanlines{opacity:.11!important;background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(255,255,255,.10) 3px 4px)!important;mix-blend-mode:screen!important;}
+.film-grain{opacity:.035!important;}
+.vignette{opacity:.28!important;}
+.tracking-band{background:rgba(240,240,240,.24)!important;box-shadow:0 1px 6px rgba(255,255,255,.08)!important;opacity:.12!important;}
+.screen-glass:after{background:linear-gradient(90deg,rgba(255,255,255,.015),transparent 15%,transparent 85%,rgba(255,255,255,.015))!important;mix-blend-mode:screen!important;}
+
+/* Typografia: Arial bold, senza font remoti o cartelle aggiuntive. */
+body,button,input,textarea,select{font-family:Arial,Helvetica,sans-serif!important;font-weight:700!important;}
+h1,h2,h3,.boot-center h1,.archive-card h2,.credits-roll h2,.game-intro-label,.cerchio-line{
+  font-family:"Arial Black",Arial,Helvetica,sans-serif!important;font-weight:900!important;
+}
+.boot-center h1{color:#fff!important;text-shadow:0 3px 12px #000,0 0 22px rgba(255,255,255,.16)!important;letter-spacing:.035em!important;}
+.archive-card{
+  background:rgba(3,3,3,.94)!important;border:1px solid rgba(245,245,245,.55)!important;
+  box-shadow:0 18px 60px rgba(0,0,0,.78),inset 0 0 0 1px rgba(255,255,255,.06)!important;
+  backdrop-filter:blur(5px)!important;
+}
+.archive-card:before{border-color:rgba(255,255,255,.10)!important;}
+.archive-card h2,.credits-roll h2{color:#fff!important;text-shadow:0 2px 8px #000!important;font-weight:900!important;}
+.story-copy,.credits-copy-block .story-copy{
+  color:#f7f7f4!important;font-family:Arial,Helvetica,sans-serif!important;
+  font-size:clamp(15px,1.22vw,18px)!important;line-height:1.72!important;font-weight:700!important;
+  text-shadow:0 2px 5px #000,0 0 2px #000!important;
+}
+.source-quote,.credits-copy-block .source-quote{color:#fff!important;border-color:#c9c9c9!important;font-weight:700!important;text-shadow:0 2px 5px #000!important;}
+.archive-kicker,.scene-number,.game-intro-label,.small-note,{color:#dededb!important;font-weight:800!important;text-shadow:0 1px 4px #000!important;}
+.action-button,.choice-button{
+  color:#fff!important;background:rgba(5,5,5,.97)!important;border:2px solid #d6d6d2!important;
+  font-family:Arial,Helvetica,sans-serif!important;font-size:clamp(11px,1vw,14px)!important;font-weight:900!important;
+  letter-spacing:.07em!important;text-shadow:0 1px 4px #000!important;box-shadow:0 3px 0 #000,0 0 0 1px rgba(255,255,255,.10)!important;
+}
+.action-button:hover,.choice-button:hover{background:#f0f0ed!important;color:#080808!important;border-color:#fff!important;text-shadow:none!important;}
+.action-button.secondary,.action-button.danger{color:#fff!important;border-color:#c8c8c4!important;}
+.action-button:focus-visible,.choice-button:focus-visible{outline:3px solid #fff!important;outline-offset:4px!important;}
+.cerchio-line,.cerchio-line.blood-red-line,.cerchio-line.final-cerchio{
+  color:#fff!important;font-weight:900!important;text-shadow:0 3px 12px #000,0 0 2px #000!important;
+}
+.cerchio-line.final-cerchio{color:#fff!important;}
+.anomaly-toast{background:rgba(0,0,0,.97)!important;border:1px solid #ddd!important;color:#fff!important;font-weight:900!important;text-shadow:0 1px 3px #000!important;}
+.loading-strip{background:#363636!important}.loading-strip i{background:#eee!important;}
+
+/* La vecchia interfaccia a libro è stata sostituita dalle schede operative. */
+
+/* Timer dei giochi conservato, ma ridisegnato in scala di grigi. */
+.game-runtime{background:rgba(3,3,3,.94)!important;border-color:#cfcfcb!important;box-shadow:0 18px 55px #000!important;}
+.game-runtime:before{border-color:rgba(255,255,255,.2)!important;}
+.game-runtime-topline,.game-runtime-topline #gameMinuteTick,.game-runtime-label,.game-runtime-caption{color:#ddd!important;font-weight:800!important;}
+.game-runtime-clock{color:#fff!important;font-family:Consolas,"Courier New",monospace!important;font-weight:900!important;text-shadow:0 2px 10px #000!important;}
+.game-runtime-signal i{background:#ddd!important;}
+.game-runtime .action-primary{border-color:#eee!important;color:#fff!important;background:#111!important;}
+.game-intro-screen{background:rgba(0,0,0,.68)!important;}
+.game-intro-label{color:#fff!important;font-size:clamp(24px,3.2vw,42px)!important;font-weight:900!important;text-shadow:0 3px 10px #000!important;}
+.game-intro-sprite{filter:none!important;object-fit:contain!important;object-position:center!important;max-width:min(70%,780px)!important;max-height:42%!important;}
+.asset-missing-note{display:block;color:#fff;font:800 12px Arial,sans-serif;text-align:center;padding:10px;background:#111;border:1px solid #aaa;}
+
+/* Schermo con la stessa proporzione dei fondali: 1920 x 1018. */
+.scene{min-height:0!important;overflow:auto!important;overscroll-behavior:contain!important;padding:clamp(12px,2.2vw,30px)!important;}
+.archive-card{max-width:min(1040px,100%)!important;max-height:100%!important;overflow:auto!important;}
+@media(max-width:760px){
+  body{padding:6px!important;}
+  .tv-frame{width:min(calc(100vw - 12px),calc((100dvh - 12px)*1.88605108))!important;}
+  .scene{padding:8px!important;overflow:auto!important;}
+  .archive-card{padding:clamp(12px,3vw,20px)!important;}
+  .story-copy,.credits-copy-block .story-copy{font-size:clamp(12px,2.8vw,15px)!important;line-height:1.55!important;}
+  .action-button,.choice-button{font-size:11px!important;padding:10px 13px!important;}
+  .game-intro-label{font-size:clamp(18px,4vw,28px)!important;}
+}
+@media(prefers-reduced-motion:reduce){.film-grain,.tracking-band,.cerchio-line.long-laugh{animation:none!important;}}
+
+
+/* La pagina finale è un epilogo: dissolvenza lenta, senza vecchie etichette o sottotitoli. */
+.final-end{
+  width:min(100%,1100px)!important;min-height:68%!important;margin:auto!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  justify-content:center!important;gap:clamp(24px,5vh,52px)!important;
+  text-align:center!important;background:transparent!important;border:0!important;
+  box-shadow:none!important;padding:clamp(20px,5vw,70px)!important;
+  animation:final-screen-fade 5.2s ease both!important;
+}
+.final-end h2{
+  margin:0!important;color:#fff!important;font-family:"Arial Black",Arial,Helvetica,sans-serif!important;
+  font-weight:900!important;font-size:clamp(28px,5vw,68px)!important;letter-spacing:.08em!important;
+  text-shadow:0 3px 18px #000,0 0 26px rgba(255,255,255,.14)!important;
+  animation:final-title-fade 6s ease both!important;
+}
+.final-end [data-action="power-off"]{
+  margin-top:clamp(14px,3vh,32px)!important;animation:final-control-fade 6.2s ease both!important;
+}
+@keyframes final-screen-fade{0%{opacity:0}100%{opacity:1}}
+@keyframes final-title-fade{0%{opacity:0;filter:blur(4px);transform:translateY(8px)}70%{opacity:.72;filter:blur(0);transform:translateY(0)}100%{opacity:1;filter:blur(0);transform:translateY(0)}}
+@keyframes final-control-fade{0%,55%{opacity:0}100%{opacity:1}}
+/* Schermata RIAVVOLGI: un solo comando, grande e al centro, senza titoli. */
+.final-end.done-end{min-height:100%!important;gap:0!important;animation:none!important;}
+.done-end [data-action="restart"]{
+  min-width:min(330px,84vw)!important;min-height:78px!important;padding:22px 42px!important;
+  font-size:clamp(20px,3vw,30px)!important;letter-spacing:.15em!important;
+  border:2px solid rgba(255,255,255,.88)!important;background:rgba(0,0,0,.82)!important;
+  box-shadow:0 8px 40px rgba(0,0,0,.72),0 0 22px rgba(255,255,255,.12)!important;
+}
+.done-end [data-action="restart"]:hover{background:#f3f3f0!important;color:#080808!important;}
+/* Il fondale gameplay viene caricato da assets/img/bg-games.png. */
+.game-intro-screen{background:transparent!important;}
+@media(max-width:760px){
+  .final-end h2{font-size:clamp(24px,7vw,42px)!important;}
+  .done-end [data-action="restart"]{min-height:68px!important;padding:18px 28px!important;}
+}
+@media(prefers-reduced-motion:reduce){
+  body.jumpscare-active .jumpscare-overlay,body.jumpscare-active .jumpscare-sprite,.jumpscare-overlay:after,
+  .final-end,.final-end h2,.final-end [data-action="power-off"]{animation:none!important;}
+  .final-end h2{opacity:1!important;filter:none!important;transform:none!important;}
+  .final-end [data-action="power-off"]{opacity:1!important;}
+}
+
+/* Navigazione delle memorie: pulsanti più compatti e centrati, stessa linea ottica. */
+.archive-actions.memory-navigation{width:100%;justify-content:center!important;align-items:center!important;gap:12px!important;margin:24px auto 0!important;}
+.memory-navigation .action-button{min-width:142px!important;min-height:40px!important;padding:9px 15px!important;font-size:11px!important;letter-spacing:.055em!important;}
+@media(max-width:760px){.archive-actions.memory-navigation{gap:9px!important;margin-top:18px!important}.memory-navigation .action-button{min-width:126px!important;min-height:38px!important;padding:8px 12px!important;font-size:10px!important}}
+/* Schermata lettura sostituibile: il GIF occupa lo schermo interno 1920×1018 senza ritagli. */
+.reading-gif-stage{position:absolute;inset:0;width:100%;height:100%;display:grid;place-items:center;overflow:hidden;background:#050505;}
+.reading-gif{display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center;background:#050505;}
+
+
+.jumpscare-overlay{position:absolute!important;inset:0!important;z-index:80!important;display:none!important;overflow:hidden!important;pointer-events:none!important;background:#030303!important;}
+.jumpscare-sprite{display:block!important;position:absolute!important;object-fit:contain!important;object-position:center bottom!important;filter:none!important;mix-blend-mode:normal!important;}
+/* ===== REVISIONE 02/11/2026 — briefing al posto dei libri, immersione e fondale giochi ===== */
+.briefing-station{position:relative;isolation:isolate;display:flex;flex-direction:column;gap:clamp(10px,1.5vh,18px);width:min(1120px,100%);height:min(100%,820px);min-height:0;margin:auto;padding:clamp(16px,2.3vw,30px);overflow:hidden;color:#f1f1ed;background:linear-gradient(145deg,rgba(7,9,10,.94),rgba(14,15,16,.88));border:1px solid rgba(225,225,216,.52);box-shadow:0 22px 70px rgba(0,0,0,.62),inset 0 0 0 1px rgba(255,255,255,.055)}
+.briefing-station:before{content:"";position:absolute;inset:7px;border:1px solid rgba(255,255,255,.075);pointer-events:none;z-index:-1}
+.briefing-topline{display:flex;justify-content:space-between;gap:12px;align-items:center;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.22);font:800 clamp(9px,1vw,11px)/1.2 Consolas,monospace;letter-spacing:.16em;color:#e1e1dc;text-transform:uppercase}
+.briefing-led{display:inline-block;width:7px;height:7px;margin-right:8px;border-radius:50%;background:#e7e7e2;box-shadow:0 0 10px rgba(255,255,255,.55);vertical-align:1px}
+.briefing-heading{display:flex;align-items:center;gap:clamp(12px,2vw,24px);min-height:68px}.briefing-index{display:grid;place-items:center;flex:0 0 clamp(48px,6vw,70px);height:clamp(48px,6vw,70px);border:1px solid rgba(255,255,255,.54);background:rgba(255,255,255,.055);font:900 clamp(20px,3vw,34px)/1 "Arial Black",Arial,sans-serif;color:#fff}
+.briefing-title-wrap{min-width:0}.briefing-kicker{margin:0 0 5px;font:800 9px/1.2 Consolas,monospace;letter-spacing:.2em;color:#bcbcb7}.briefing-heading h2{margin:0;color:#fff;font:900 clamp(21px,3.4vw,39px)/1.08 "Arial Black",Arial,sans-serif;letter-spacing:.015em;text-shadow:0 2px 10px #000;overflow-wrap:anywhere}
+.briefing-progress{height:3px;width:100%;background:rgba(255,255,255,.12);overflow:hidden;flex:0 0 auto}.briefing-progress span{display:block;height:100%;background:#e8e8e2;box-shadow:0 0 12px rgba(255,255,255,.3);transition:width .25s ease}
+.briefing-document{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;padding:clamp(13px,2vw,24px);border:1px solid rgba(255,255,255,.16);background:linear-gradient(90deg,rgba(255,255,255,.035),transparent 12%),rgba(0,0,0,.42);scrollbar-color:#888 transparent;scrollbar-width:thin}
+.briefing-document p{max-width:88ch;margin:0 auto;color:#f3f3ef;font:700 clamp(14px,1.35vw,17px)/1.82 Arial,Helvetica,sans-serif;white-space:pre-wrap;overflow-wrap:anywhere;text-shadow:0 1px 3px #000}
+.briefing-controls{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;flex:0 0 auto}.briefing-controls .action-button{min-width:0;width:min(180px,100%);min-height:40px;padding:9px 14px;font-size:10px;letter-spacing:.08em}.briefing-controls [data-action="brief-prev"]{justify-self:start}.briefing-controls [data-action="brief-next"]{justify-self:end}.briefing-controls .action-button:disabled{opacity:.3;cursor:not-allowed;transform:none}.briefing-page-count{color:#ddd;font:800 10px/1 Consolas,monospace;letter-spacing:.16em;text-align:center}
+body.game-mode .screen-backdrop{background-size:100% 100%!important;filter:grayscale(.82) contrast(1.18) brightness(.62)!important;opacity:1!important}body.game-mode .game-runtime{background:rgba(4,5,6,.76)!important;backdrop-filter:blur(1.5px)!important}.game-intro-screen{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}
+/* Lo sfondo finale ora accompagna i saluti digitati, non una schermata duplicata BUONA STRADA. */
+.ending-saluti-screen{position:relative!important;isolation:isolate!important;width:100%!important;height:100%!important;min-height:0!important;overflow:hidden!important;padding:clamp(12px,2.4vw,28px)!important;background:#050505!important}.ending-saluti-screen .ending-background{position:absolute!important;inset:0!important;z-index:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center!important;opacity:1!important;filter:grayscale(1) brightness(2.6) contrast(1.12)!important;pointer-events:none!important}.ending-saluti-screen:before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.28));pointer-events:none}.ending-saluti-screen .saluti-typewriter-window{position:relative;z-index:2;width:min(920px,100%);margin:auto;background:rgba(0,0,0,.20);border:1px solid rgba(255,255,255,.16);box-shadow:0 12px 48px rgba(0,0,0,.28);backdrop-filter:blur(1px)}.ending-saluti-screen .saluti-typewriter-copy{color:#fff!important;font-weight:700!important;text-shadow:0 2px 8px #000!important}.ending-saluti-screen .saluti-actions{position:relative;z-index:3}
+/* Monologo: tutte le battute condividono la forza grafica della scritta CERCHIO HORROR!!! */
+.cerchio-line.villain-monologue{width:min(1120px,100%)!important;max-width:100%!important;color:#a70f1b!important;font-family:var(--display)!important;font-size:clamp(30px,5.2vw,76px)!important;font-weight:900!important;line-height:1.08!important;letter-spacing:.035em!important;text-align:center!important;text-shadow:0 2px 10px #000,0 0 20px rgba(167,15,27,.72),0 0 34px rgba(100,0,8,.45)!important;overflow-wrap:anywhere!important}.cerchio-line.villain-monologue.glitch-title:before,.cerchio-line.villain-monologue.glitch-title:after{font-family:inherit!important;font-weight:inherit!important}.scene.typewriting .cerchio-line.villain-monologue{animation:villain-type-flicker .18s steps(2,end) 2!important}@keyframes villain-type-flicker{0%,100%{opacity:1;transform:translate(0,0)}25%{opacity:.72;transform:translate(-2px,1px)}50%{opacity:1;transform:translate(2px,-1px)}75%{opacity:.86;transform:translate(-1px,0)}}
+/* Il monitor si espande dopo l'impatto e resta a tutto schermo fino al riavvolgimento. */
+.tv-frame{transition:width .82s cubic-bezier(.18,.78,.18,1),height .82s cubic-bezier(.18,.78,.18,1),top .82s,left .82s,border-radius .82s,padding .82s,box-shadow .82s}body.screen-immersed{padding:0!important;min-height:100dvh!important;overflow:hidden!important;align-items:stretch!important;justify-content:stretch!important}body.screen-immersed .tv-frame{position:fixed!important;inset:0!important;z-index:99990!important;width:100vw!important;height:100dvh!important;min-height:0!important;max-height:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:#000!important;box-shadow:none!important}body.screen-immersed .tv-frame:before{display:none!important}body.screen-immersed .screen-glass{width:100%!important;height:100%!important;min-height:0!important;aspect-ratio:auto!important;border-radius:0!important;box-shadow:none!important}body.screen-immersed .scene{padding:clamp(12px,2.4vw,34px)!important}
+/* Il mostro emerge dal bordo inferiore, si lancia verso il vetro e trascina il pubblico dentro il monitor. */
+body.jumpscare-active{overflow:hidden!important;background:#000!important}body.jumpscare-active .tv-frame{visibility:visible!important;animation:jump-screen-shake 4.12s steps(2,end) both!important;will-change:transform!important;transform-origin:center!important}body.jumpscare-active .screen-glass{overflow:hidden!important;animation:jump-glass-rattle 4.12s steps(2,end) both!important}body.jumpscare-active .screen-backdrop{filter:grayscale(1) contrast(2.1) brightness(.42);transform:scale(1.025);animation:jump-background-glitch 4.12s steps(1,end) both!important}body.jumpscare-active .screen-glass>.jumpscare-overlay{position:absolute!important;inset:0!important;z-index:80!important;display:block!important;overflow:hidden!important;background:#030303!important;pointer-events:none!important;isolation:isolate!important;border:0!important;border-radius:0!important}body.jumpscare-active .jumpscare-overlay:before{content:""!important;display:block!important;position:absolute!important;inset:-5%!important;z-index:1!important;pointer-events:none!important;opacity:.75!important;background:repeating-linear-gradient(0deg,rgba(255,255,255,.11) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 7px)!important;mix-blend-mode:screen!important;animation:jump-static-tear .095s steps(2,end) infinite!important}body.jumpscare-active .screen-glass>.jumpscare-overlay .jumpscare-sprite{position:absolute!important;left:50%!important;top:auto!important;right:auto!important;bottom:-12%!important;width:min(80vw,900px)!important;height:105%!important;max-width:none!important;max-height:none!important;display:block!important;object-fit:contain!important;object-position:center bottom!important;transform:translate(-50%,112%) scale(.42)!important;transform-origin:50% 100%!important;filter:none!important;mix-blend-mode:normal!important;z-index:2!important;animation:monster-from-below 4.12s cubic-bezier(.12,.8,.17,1) both!important;will-change:transform!important}body.jumpscare-active .screen-glass>.jumpscare-overlay:after{content:""!important;position:absolute!important;inset:0!important;z-index:4!important;pointer-events:none!important;background:#fff!important;opacity:0!important;animation:jump-black-white-pulses 4.12s steps(1,end) both!important}
+@keyframes monster-from-below{0%{transform:translate(-50%,112%) scale(.42)}13%{transform:translate(-50%,58%) scale(.58)}28%{transform:translate(-50%,12%) scale(.82)}44%{transform:translate(-50%,-2%) scale(1.05)}61%{transform:translate(-50%,-8%) scale(1.55)}76%{transform:translate(-50%,-12%) scale(2.55)}86%{transform:translate(-50%,-15%) scale(3.25)}100%{transform:translate(-50%,-17%) scale(3.45)}}
+@keyframes jump-screen-shake{0%,100%{transform:translate(0,0) rotate(0)}8%{transform:translate(-5px,3px) rotate(-.22deg)}16%{transform:translate(6px,-4px) rotate(.28deg)}27%{transform:translate(-8px,-2px) rotate(-.3deg)}38%{transform:translate(6px,4px) rotate(.22deg)}52%{transform:translate(-4px,3px) rotate(-.15deg)}67%{transform:translate(3px,-2px) rotate(.12deg)}82%{transform:translate(-2px,1px) rotate(-.06deg)}}
+@keyframes jump-glass-rattle{0%,100%{transform:translate(0,0)}10%{transform:translate(-3px,2px)}20%{transform:translate(3px,-2px)}32%{transform:translate(-4px,1px)}48%{transform:translate(3px,2px)}62%{transform:translate(-2px,-1px)}78%{transform:translate(2px,1px)}}
+@keyframes jump-background-glitch{0%,13%,16%,31%,34%,51%,54%,72%,75%,100%{filter:grayscale(1) contrast(2.1) brightness(.42)}14%,15%,32%,33%,52%,53%,73%,74%{filter:grayscale(1) contrast(2.8) brightness(1.7) invert(1)}22%,23%,44%,45%,64%,65%,85%,86%{filter:grayscale(1) contrast(2.3) brightness(.12)}}
+@keyframes jump-black-white-pulses{0%,13%,16%,31%,34%,51%,54%,72%,75%,100%{opacity:0;background:#fff}14%,15%,32%,33%,52%,53%,73%,74%{opacity:.84;background:#fff}22%,23%,44%,45%,64%,65%,85%,86%{opacity:.78;background:#000}}
+@keyframes jump-static-tear{0%,100%{transform:translateY(0) skewX(0);opacity:.7}25%{transform:translateY(-3px) skewX(.4deg);opacity:.95}50%{transform:translateY(2px) skewX(-.5deg);opacity:.55}75%{transform:translateY(-1px) skewX(.2deg);opacity:.85}}
+@media(max-width:760px){.briefing-station{padding:12px;gap:9px}.briefing-topline{font-size:8px;letter-spacing:.1em}.briefing-document{padding:12px}.briefing-document p{font-size:13px;line-height:1.62}.briefing-controls{gap:7px}.briefing-controls .action-button{width:100%;padding:8px 7px;font-size:9px;letter-spacing:.035em}.briefing-page-count{font-size:9px}body.jumpscare-active .screen-glass>.jumpscare-overlay .jumpscare-sprite{width:min(105vw,800px)!important;height:104%!important}}
+@media(prefers-reduced-motion:reduce){body.jumpscare-active .tv-frame,body.jumpscare-active .screen-glass,body.jumpscare-active .screen-backdrop,body.jumpscare-active .jumpscare-overlay:before,body.jumpscare-active .jumpscare-overlay:after,body.jumpscare-active .jumpscare-sprite{animation-duration:.01ms!important;animation-iteration-count:1!important}.briefing-progress span{transition:none!important}}
+
+/* Gameplay: il fondale tecnico resta visibile dietro il pannello, l'ambience sale a volume dedicato. */
+body.game-mode .screen-backdrop{opacity:1!important;background-size:100% 100%!important;filter:grayscale(1) contrast(1.12) brightness(.78)!important;transform:none!important}
+body.game-mode .game-runtime{background:rgba(3,4,5,.58)!important;backdrop-filter:blur(.8px)!important}
+@media(max-width:760px){.ending-saluti-screen .ending-background{object-fit:cover!important}.ending-saluti-screen .saluti-typewriter-window{background:rgba(0,0,0,.36)!important}}
+
+
+/* REVISIONE UTENTE — dossier semplificato, scelte senza riquadri, saluti completi. */
+.briefing-heading{min-height:54px!important;gap:0!important;justify-content:center!important;text-align:center!important}
+.briefing-title-wrap{width:100%!important;text-align:center!important}
+.briefing-heading h2{font-size:clamp(24px,3.7vw,42px)!important;letter-spacing:.01em!important;margin:0!important}
+/* Elimina ogni residuo della vecchia intestazione DOSSIER / GIOCO / pagine. */
+.briefing-topline,.briefing-led,.briefing-index,.briefing-kicker{display:none!important}
+/* Le scelte e i saluti restano direttamente sul fondale: niente pannelli trasparenti rettangolari. */
+.credits-screen,.credits-window,.credits-roll,.credits-copy-block,
+.saluti-typewriter-screen,.saluti-typewriter-window{
+  background:transparent!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.credits-window{mask-image:linear-gradient(to bottom,transparent 0%,black 9%,black 91%,transparent 100%)!important}
+body.credits-mode .credits-window{border:0!important;box-shadow:none!important;background:transparent!important}
+.credits-meta{border:0!important}
+.credits-copy-block .story-copy{background:transparent!important;text-shadow:0 2px 9px #000,0 0 18px rgba(0,0,0,.85)!important}
+.saluti-typewriter-screen{width:min(1080px,100%)!important;gap:clamp(8px,1.5vh,16px)!important;padding:clamp(12px,2vw,26px)!important}
+.saluti-banner{position:relative;z-index:2;flex:0 0 auto;width:100%;text-align:center;padding:clamp(3px,1vh,10px) 0 0;background:transparent!important;border:0!important;box-shadow:none!important}
+.saluti-banner h2{margin:0 0 5px!important;color:#fff!important;font-family:"Arial Black",Impact,Arial,sans-serif!important;font-size:clamp(25px,4.4vw,48px)!important;font-weight:900!important;letter-spacing:.035em!important;line-height:1.08!important;text-shadow:0 2px 12px #000,0 0 22px rgba(255,255,255,.16)!important}
+.saluti-banner p{margin:0!important;color:#f0f0ec!important;font-family:var(--type)!important;font-size:clamp(12px,1.5vw,16px)!important;font-weight:700!important;letter-spacing:.22em!important;text-transform:uppercase!important;text-shadow:0 2px 10px #000!important}
+.ending-saluti-screen .ending-background{filter:grayscale(1) brightness(3.1) contrast(1.15)!important}
+.ending-saluti-screen:before{background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.18))!important}
+.ending-saluti-screen .saluti-typewriter-window{width:min(980px,100%)!important;padding:clamp(8px,1.5vh,18px) clamp(8px,1.8vw,22px)!important;margin:0 auto!important;flex:1 1 auto!important;min-height:0!important;overflow:auto!important}
+.ending-saluti-screen .saluti-typewriter-copy{width:min(850px,100%)!important;color:#fff!important;font-weight:700!important;text-shadow:0 2px 10px #000,0 0 18px rgba(0,0,0,.9)!important}
+.ending-saluti-screen .saluti-actions{background:transparent!important;border:0!important;box-shadow:none!important}
+/* Il jumpscare è un PNG RGBA disegnato a mano: il fondale resta visibile attraverso le aree trasparenti. */
+.jumpscare-overlay{background:transparent!important}
+.jumpscare-sprite{object-fit:contain!important;object-position:center bottom!important}
+@media(max-width:760px){
+  .briefing-heading{min-height:44px!important}
+  .briefing-heading h2{font-size:clamp(20px,6vw,31px)!important}
+  .saluti-banner h2{font-size:clamp(22px,6.2vw,34px)!important}
+  .saluti-banner p{font-size:11px!important}
+  .saluti-typewriter-screen{padding:9px!important}
+  .ending-saluti-screen .saluti-typewriter-window{padding:6px!important}
+}
+
+
+/* REVISIONE 03/11/2026 — saluti senza musica, BUONA STRADA separata, lore cinematografica Gioco 3. */
+.fullscreen-finale,
+.goodbye-fullscreen{
+  position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;min-height:100dvh!important;
+  max-width:none!important;margin:0!important;padding:clamp(18px,3vw,48px)!important;z-index:100000!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  overflow:hidden!important;background:#050707!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+  isolation:isolate!important;
+}
+.fullscreen-finale .ending-background,
+.goodbye-fullscreen .goodbye-background{
+  position:absolute!important;inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;
+  object-fit:cover!important;object-position:center!important;display:block!important;z-index:0!important;opacity:1!important;
+  filter:grayscale(1) contrast(1.06) brightness(.82)!important;pointer-events:none!important;
+}
+.finale-shade,.goodbye-shade{position:absolute!important;inset:0!important;z-index:1!important;background:linear-gradient(180deg,rgba(0,0,0,.24),rgba(0,0,0,.44))!important;pointer-events:none!important}
+.fullscreen-finale .saluti-banner,.fullscreen-finale .saluti-typewriter-window,.fullscreen-finale .saluti-actions,
+.goodbye-fullscreen h1,.goodbye-fullscreen .goodbye-continue{position:relative!important;z-index:2!important}
+.fullscreen-finale .saluti-banner{width:100%!important;text-align:center!important;flex:0 0 auto!important;margin:0 0 clamp(8px,2vh,22px)!important}
+.fullscreen-finale .saluti-banner h2{font-size:clamp(27px,4vw,50px)!important;letter-spacing:.18em!important;color:#f3f3ed!important;text-shadow:0 2px 16px #000!important}
+.fullscreen-finale .saluti-typewriter-window{flex:1 1 auto!important;width:min(1180px,92vw)!important;max-height:76dvh!important;min-height:0!important;overflow:auto!important;margin:0 auto!important;padding:clamp(10px,2vw,28px)!important;background:transparent!important;border:0!important;outline:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;mask-image:none!important}
+.fullscreen-finale .saluti-typewriter-copy{width:min(1020px,100%)!important;color:#fff!important;font-size:clamp(16px,1.45vw,22px)!important;line-height:1.85!important;font-weight:700!important;text-shadow:0 2px 7px #000,0 0 18px rgba(0,0,0,.95)!important;text-align:center!important}
+.fullscreen-finale .saluti-actions{width:100%!important;flex:0 0 auto!important;justify-content:center!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.goodbye-fullscreen{animation:goodbye-fade-in 4.2s ease both!important;gap:clamp(24px,5vh,56px)!important}
+.goodbye-fullscreen h1{margin:0!important;text-align:center!important;color:#f5f4ed!important;font-family:"Arial Black",Impact,Arial,sans-serif!important;font-size:clamp(36px,7.4vw,90px)!important;line-height:1.08!important;letter-spacing:.055em!important;font-weight:900!important;text-shadow:0 3px 22px #000,0 0 44px rgba(255,255,255,.18)!important;animation:goodbye-title-arrive 5s ease both!important}
+.goodbye-fullscreen .goodbye-continue{margin-top:clamp(18px,4vh,46px)!important;opacity:0;animation:goodbye-button-arrive .9s ease 4s forwards!important}
+@keyframes goodbye-fade-in{from{opacity:0}to{opacity:1}}
+@keyframes goodbye-title-arrive{0%{opacity:0;filter:blur(9px);transform:translateY(14px) scale(.985)}100%{opacity:1;filter:blur(0);transform:translateY(0) scale(1)}}
+@keyframes goodbye-button-arrive{to{opacity:1}}
+
+/* Il nuovo intermezzo della Zona Ombra: immagine disegnata a mano che si rivela insieme alla voce. */
+.game3-lore-screen{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;z-index:100000!important;overflow:hidden!important;display:grid!important;place-items:center!important;padding:clamp(18px,4vw,64px)!important;background:#020303!important;isolation:isolate!important;transition:background-color .12s linear!important}
+.game3-lore-background{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;z-index:0!important;opacity:0;filter:grayscale(1) contrast(1.2) brightness(.72)!important;transition:opacity .12s linear!important;pointer-events:none!important}
+.game3-lore-shade{position:absolute!important;inset:0!important;z-index:1!important;background:radial-gradient(ellipse at center,rgba(0,0,0,.25),rgba(0,0,0,.80))!important;pointer-events:none!important}
+.game3-lore-copy{position:relative!important;z-index:2!important;width:min(1480px,94vw)!important;max-height:86dvh!important;overflow:auto!important;display:grid!important;place-items:center!important;padding:clamp(8px,2vw,24px)!important;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}
+.game3-lore-text{margin:0!important;color:#f0f0eb!important;font-family:"Arial Black",Impact,Arial,sans-serif!important;font-size:clamp(21px,2.35vw,39px)!important;line-height:1.58!important;letter-spacing:.012em!important;font-weight:900!important;text-align:center!important;white-space:pre-wrap!important;text-shadow:0 3px 12px #000,0 0 24px rgba(0,0,0,.98)!important;overflow-wrap:anywhere!important}
+.game3-lore-screen.lore-cut{background:#000!important;transition:none!important}
+.game3-lore-screen.lore-cut .game3-lore-background,.game3-lore-screen.lore-cut .game3-lore-copy,.game3-lore-screen.lore-cut .game3-lore-shade{opacity:0!important;transition:none!important}
+body.game3-lore-active .screen-backdrop{opacity:0!important;background-image:none!important}
+@media(max-width:760px){.fullscreen-finale{padding:10px!important}.fullscreen-finale .saluti-typewriter-window{width:96vw!important;max-height:80dvh!important;padding:5px!important}.fullscreen-finale .saluti-typewriter-copy{font-size:15px!important;line-height:1.7!important}.game3-lore-screen{padding:12px!important}.game3-lore-copy{width:97vw!important;max-height:90dvh!important;padding:4px!important}.game3-lore-text{font-size:clamp(18px,4.2vw,27px)!important;line-height:1.5!important}}
+@media(prefers-reduced-motion:reduce){.goodbye-fullscreen,.goodbye-fullscreen h1,.goodbye-fullscreen .goodbye-continue{animation-duration:.01ms!important;animation-delay:0s!important}}
+
+/* Le icone dei giochi sono elementi visivi principali, non miniature. */
+.game-intro-sprite{max-width:min(72vw,880px)!important;max-height:min(53vh,520px)!important;width:auto!important;height:auto!important;opacity:.9!important}
+@media(max-width:760px){.game-intro-sprite{max-width:88vw!important;max-height:38vh!important}}
+
+
+/* REVISIONE FINALE 03/11/2026 — jumpscare in primo piano e lore a versi dissolventi. */
+.jumpscare-overlay{display:none!important}
+body.jumpscare-active .jumpscare-overlay{
+  display:block!important;position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
+  z-index:2147483000!important;overflow:visible!important;background:transparent!important;pointer-events:none!important;isolation:isolate!important;
+}
+body.jumpscare-active .jumpscare-overlay::before{
+  content:""!important;position:absolute!important;inset:-2%!important;z-index:1!important;pointer-events:none!important;
+  opacity:.36!important;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.14) 0 1px,transparent 1px 4px),
+             repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 8px)!important;
+  mix-blend-mode:screen!important;animation:foreground-jump-static .09s steps(2,end) infinite!important;
+}
+body.jumpscare-active .jumpscare-overlay::after{
+  content:""!important;position:absolute!important;inset:0!important;z-index:3!important;pointer-events:none!important;
+  opacity:0;background:#fff;animation:foreground-jump-flash 4.14s steps(1,end) both!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+  display:block!important;position:absolute!important;left:50%!important;right:auto!important;top:auto!important;bottom:-5dvh!important;
+  height:min(94dvh,1500px)!important;width:auto!important;max-width:96vw!important;max-height:none!important;
+  object-fit:contain!important;object-position:center bottom!important;
+  transform:translate3d(-50%,1.5dvh,0) scale(.78);transform-origin:50% 43%!important;
+  filter:none!important;mix-blend-mode:normal!important;box-shadow:none!important;z-index:2!important;
+  animation:monster-foreground-lunge 4.14s cubic-bezier(.12,.78,.12,1) both!important;will-change:transform!important;
+}
+@keyframes monster-foreground-lunge{
+  /* Primo impatto: il mostro è già visibile e vibra sul colpo audio. */
+  0%{transform:translate3d(-50%,1.5dvh,0) scale(.78) rotate(0)}
+  3%{transform:translate3d(calc(-50% - 9px),1dvh,0) scale(.79) rotate(-1.3deg)}
+  6%{transform:translate3d(calc(-50% + 10px),-.5dvh,0) scale(.80) rotate(1.5deg)}
+  9%{transform:translate3d(calc(-50% - 8px),.8dvh,0) scale(.81) rotate(-1.2deg)}
+  12%{transform:translate3d(calc(-50% + 7px),-.4dvh,0) scale(.82) rotate(1deg)}
+  16%{transform:translate3d(calc(-50% - 3px),-.8dvh,0) scale(.84) rotate(-.5deg)}
+  /* Scatto rapido verso lo spettatore: il salto avviene in meno di un secondo. */
+  20%{transform:translate3d(-50%,-1.5dvh,0) scale(1.02) rotate(0)}
+  27%{transform:translate3d(-50%,-3dvh,0) scale(1.75) rotate(1deg)}
+  34%{transform:translate3d(-50%,-4.5dvh,0) scale(2.85) rotate(-1deg)}
+  42%{transform:translate3d(-50%,-6dvh,0) scale(4.35) rotate(0)}
+  100%{transform:translate3d(-50%,-6dvh,0) scale(4.35) rotate(0)}
+}
+@keyframes foreground-jump-static{
+  0%,100%{transform:translateY(0) skewX(0);opacity:.3}
+  25%{transform:translateY(-4px) skewX(.5deg);opacity:.55}
+  50%{transform:translateY(3px) skewX(-.6deg);opacity:.24}
+  75%{transform:translateY(-2px) skewX(.3deg);opacity:.48}
+}
+@keyframes foreground-jump-flash{
+  0%,13%,16%,31%,34%,51%,54%,72%,75%,100%{opacity:0;background:#fff}
+  14%,15%,32%,33%,52%,53%,73%,74%{opacity:.56;background:#fff}
+  22%,23%,44%,45%,64%,65%,85%,86%{opacity:.42;background:#000}
+}
+@media(max-width:760px){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{height:min(92dvh,1100px)!important;max-width:118vw!important;bottom:-3dvh!important}
+}
+@media(prefers-reduced-motion:reduce){
+  body.jumpscare-active .jumpscare-overlay::before{animation:none!important}
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{animation-duration:2.4s!important}
+}
+
+/* La lore non viene digitata: ogni verso entra, resta solo per il proprio tempo e svanisce. */
+.game3-lore-background{
+  opacity:.035!important;filter:grayscale(1) saturate(.06) contrast(.72) brightness(.09) blur(22px)!important;
+  transform:scale(1.08);
+  transition:opacity 3.4s ease,filter 3.4s ease,transform 3.8s ease!important;
+}
+.game3-lore-shade{opacity:.96;transition:opacity 3.4s ease!important}
+.game3-lore-verse{
+  display:block!important;margin:0!important;width:min(1500px,94vw)!important;
+  color:#f2f0e8!important;font-family:"Arial Black",Impact,Arial,sans-serif!important;
+  font-size:clamp(23px,3vw,48px)!important;line-height:1.48!important;font-weight:900!important;
+  text-align:center!important;letter-spacing:.015em!important;white-space:normal!important;
+  overflow-wrap:normal!important;word-break:normal!important;
+  text-shadow:0 3px 14px rgba(0,0,0,.98),0 0 34px rgba(0,0,0,.95)!important;
+  opacity:0;filter:blur(14px);transform:translateY(18px) scale(.985);
+  transition:opacity 1.65s ease,filter 1.65s ease,transform 1.65s ease!important;
+}
+.game3-lore-verse.verse-visible{opacity:1;filter:blur(0);transform:translateY(0) scale(1)}
+.game3-lore-screen.lore-suspense .game3-lore-verse{opacity:0!important;filter:blur(18px)!important;transform:scale(1.02)!important}
+.game3-lore-screen.lore-suspense .game3-lore-background{
+  animation:lore-silent-anticipation 5.6s ease-in-out both!important;
+}
+@keyframes lore-silent-anticipation{
+  0%{transform:scale(1.045);filter:grayscale(0) saturate(1.25) contrast(1.2) brightness(.88) blur(0)}
+  55%{transform:scale(1.075);filter:grayscale(0) saturate(1.55) contrast(1.34) brightness(1.03) blur(0)}
+  100%{transform:scale(1.09);filter:grayscale(0) saturate(1.75) contrast(1.42) brightness(1.08) blur(0)}
+}
+.game3-lore-screen.lore-cut{background:#000!important;transition:none!important}
+.game3-lore-screen.lore-cut .game3-lore-background,
+.game3-lore-screen.lore-cut .game3-lore-copy,
+.game3-lore-screen.lore-cut .game3-lore-shade{opacity:0!important;transition:opacity .5s ease!important}
+
+/* BUONA STRADA, CLAN: solo nero; bg-end rimane riservato alla schermata dei saluti. */
+.goodbye-fullscreen.goodbye-black{background:#000!important}
+.goodbye-fullscreen.goodbye-black::before,.goodbye-fullscreen.goodbye-black::after{display:none!important}
+.goodbye-fullscreen.goodbye-black .goodbye-background,.goodbye-fullscreen.goodbye-black .goodbye-shade{display:none!important}
+
+
+/* REVISIONE 04/11/2026 — jumpscare a snap-zoom, camera shock e distorsione del fondale. */
+.filter-bank{position:absolute!important;width:0!important;height:0!important;overflow:hidden!important;pointer-events:none!important}
+body.jumpscare-active .screen-backdrop{
+  filter:url(#jumpDistort) saturate(3.15) contrast(1.95) brightness(.72);
+  transform:scale(1.12) skewX(-.8deg);
+  transform-origin:50% 50%!important;
+  animation:jump-backdrop-pulse 4.14s steps(1,end) both!important;
+  will-change:filter,transform!important;
+}
+body.jumpscare-active .tv-frame{
+  animation:jump-camera-shock 4.14s steps(1,end) both!important;
+  transform-origin:50% 50%!important;will-change:transform!important;
+}
+body.jumpscare-active .screen-glass{
+  animation:jump-glass-impact 4.14s steps(1,end) both!important;
+  overflow:hidden!important;
+}
+body.jumpscare-active .jumpscare-overlay{
+  display:block!important;position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
+  z-index:2147483000!important;overflow:hidden!important;background:transparent!important;pointer-events:none!important;isolation:isolate!important;
+}
+body.jumpscare-active .jumpscare-overlay::before{
+  content:""!important;position:absolute!important;inset:-4%!important;z-index:4!important;pointer-events:none!important;
+  opacity:.56!important;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.18) 0 1px,transparent 1px 3px),
+             repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,transparent 1px 6px),
+             linear-gradient(90deg,transparent 0 46%,rgba(255,255,255,.13) 49%,transparent 53% 100%)!important;
+  mix-blend-mode:screen!important;animation:jump-foreground-tear .075s steps(2,end) infinite!important;
+}
+body.jumpscare-active .jumpscare-overlay::after{
+  content:""!important;position:absolute!important;inset:0!important;z-index:5!important;pointer-events:none!important;
+  opacity:0;background:#fff;animation:jump-impact-flash 4.14s steps(1,end) both!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+  display:block!important;position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+  width:auto!important;height:min(132dvh,2100px)!important;max-width:none!important;max-height:none!important;
+  object-fit:contain!important;object-position:center center!important;
+  transform:translate3d(-50%,-50%,0) scale(.98);transform-origin:50% 50%!important;
+  opacity:1!important;visibility:visible!important;filter:drop-shadow(0 0 22px rgba(255,112,20,.48)) contrast(1.08) saturate(1.12);
+  mix-blend-mode:normal!important;box-shadow:none!important;z-index:3!important;
+  animation:jump-snap-closeup 4.14s steps(1,end) both!important;will-change:transform,filter!important;
+}
+@keyframes jump-snap-closeup{
+  /* Il volto è già presente al primo fotogramma dell'audio: niente salita lenta dal basso. */
+  0%{transform:translate3d(-50%,-50%,0) scale(.98) rotate(0);filter:contrast(1.08) saturate(1.12)}
+  2%{transform:translate3d(calc(-50% - 9px),calc(-50% + 2px),0) scale(1.005) rotate(-.9deg)}
+  4%{transform:translate3d(calc(-50% + 11px),calc(-50% - 3px),0) scale(1.01) rotate(1deg)}
+  6%{transform:translate3d(calc(-50% - 7px),calc(-50% + 1px),0) scale(1.015) rotate(-.8deg)}
+  8%{transform:translate3d(calc(-50% + 6px),calc(-50% - 2px),0) scale(1.02) rotate(.7deg)}
+  10%{transform:translate3d(-50%,-50%,0) scale(1.04) rotate(0)}
+  /* Taglio improvviso: il volto diventa un primissimo piano, senza animazione di rincorsa. */
+  12%{transform:translate3d(-50%,-50%,0) scale(2.55) rotate(0);filter:contrast(1.42) saturate(1.35)}
+  14%{transform:translate3d(calc(-50% - 18px),calc(-50% + 5px),0) scale(2.62) rotate(-1.8deg)}
+  16%{transform:translate3d(calc(-50% + 17px),calc(-50% - 6px),0) scale(2.72) rotate(1.7deg)}
+  18%{transform:translate3d(calc(-50% - 12px),calc(-50% - 2px),0) scale(2.82) rotate(-1.1deg)}
+  22%{transform:translate3d(calc(-50% + 8px),calc(-50% + 3px),0) scale(2.88) rotate(.8deg)}
+  26%{transform:translate3d(-50%,-50%,0) scale(2.94) rotate(0)}
+  38%{transform:translate3d(calc(-50% - 7px),calc(-50% + 4px),0) scale(3.02) rotate(-.5deg)}
+  50%{transform:translate3d(calc(-50% + 8px),calc(-50% - 4px),0) scale(3.08) rotate(.6deg)}
+  66%{transform:translate3d(-50%,-50%,0) scale(3.12) rotate(0)}
+  82%{transform:translate3d(-50%,-50%,0) scale(3.22) rotate(0);filter:contrast(1.65) saturate(.72) brightness(1.18)}
+  92%{transform:translate3d(-50%,-50%,0) scale(3.42) rotate(0);filter:contrast(2) saturate(.2) brightness(1.5) blur(1px)}
+  100%{transform:translate3d(-50%,-50%,0) scale(3.65) rotate(0);filter:contrast(2.1) saturate(0) brightness(1.8) blur(4px)}
+}
+@keyframes jump-camera-shock{
+  0%,10%{transform:translate3d(0,0,0) scale(1)}
+  12%{transform:translate3d(-9px,4px,0) scale(1.012)}
+  14%{transform:translate3d(11px,-5px,0) scale(1.018)}
+  16%{transform:translate3d(-13px,3px,0) scale(1.025)}
+  18%{transform:translate3d(8px,-3px,0) scale(1.014)}
+  22%{transform:translate3d(-4px,2px,0) scale(1.008)}
+  30%,100%{transform:translate3d(0,0,0) scale(1)}
+}
+@keyframes jump-glass-impact{
+  0%,10%{transform:translate3d(0,0,0)}
+  12%{transform:translate3d(-5px,3px,0)}
+  14%{transform:translate3d(7px,-3px,0)}
+  16%{transform:translate3d(-8px,2px,0)}
+  18%{transform:translate3d(4px,-2px,0)}
+  23%,100%{transform:translate3d(0,0,0)}
+}
+@keyframes jump-backdrop-pulse{
+  0%,9%{filter:url(#jumpDistort) saturate(2.3) contrast(1.55) brightness(.78);transform:scale(1.045)}
+  10%{filter:url(#jumpDistort) saturate(3.6) contrast(2.2) brightness(.58);transform:scale(1.13) skewX(1.8deg)}
+  12%{filter:url(#jumpDistort) saturate(3.9) contrast(2.5) brightness(.65);transform:scale(1.16) skewX(-2.2deg)}
+  14%{filter:url(#jumpDistort) saturate(2.8) contrast(2.1) brightness(.88);transform:scale(1.10) skewX(1.2deg)}
+  18%{filter:url(#jumpDistort) saturate(3.4) contrast(2.3) brightness(.62);transform:scale(1.17) skewX(-1.4deg)}
+  26%{filter:url(#jumpDistort) saturate(2.7) contrast(1.9) brightness(.76);transform:scale(1.12)}
+  45%{filter:url(#jumpDistort) saturate(3.1) contrast(2.2) brightness(.6);transform:scale(1.18) skewX(1deg)}
+  65%{filter:url(#jumpDistort) saturate(2.8) contrast(2) brightness(.75);transform:scale(1.13)}
+  86%,100%{filter:url(#jumpDistort) saturate(3.4) contrast(2.2) brightness(.58);transform:scale(1.16) skewX(-1deg)}
+}
+@keyframes jump-foreground-tear{
+  0%,100%{transform:translateX(0) skewX(0);opacity:.34}
+  25%{transform:translateX(-7px) skewX(1.2deg);opacity:.68}
+  50%{transform:translateX(8px) skewX(-1deg);opacity:.4}
+  75%{transform:translateX(-3px) skewX(.7deg);opacity:.62}
+}
+@keyframes jump-impact-flash{
+  0%,10%,13%,15%,17%,100%{opacity:0;background:#fff}
+  11%,11.5%{opacity:.9;background:#fff}
+  12%,12.5%{opacity:.22;background:#000}
+  18%,18.4%{opacity:.72;background:#fff}
+  19%,19.5%{opacity:.32;background:#000}
+  93%,95%{opacity:.88;background:#fff}
+  96%,99%{opacity:.94;background:#000}
+}
+@media(max-width:760px){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{height:min(118dvh,1400px)!important;max-width:none!important}
+  @keyframes jump-snap-closeup{
+    0%,10%{transform:translate3d(-50%,-50%,0) scale(.98)}
+    12%{transform:translate3d(-50%,-50%,0) scale(2.15)}
+    14%{transform:translate3d(calc(-50% - 10px),calc(-50% + 4px),0) scale(2.3) rotate(-1.5deg)}
+    16%{transform:translate3d(calc(-50% + 10px),calc(-50% - 4px),0) scale(2.4) rotate(1.5deg)}
+    22%,100%{transform:translate3d(-50%,-50%,0) scale(2.65)}
+  }
+}
+
+/* La lore resta centrata senza barre: caratteri ridotti appena, contenitore non scorrevole. */
+.game3-lore-copy{
+  width:min(1700px,96vw)!important;max-height:78dvh!important;overflow:hidden!important;
+  scrollbar-width:none!important;overscroll-behavior:none!important;padding:clamp(4px,1vw,14px)!important;
+}
+.game3-lore-copy::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+.game3-lore-verse{
+  width:min(1640px,96vw)!important;font-size:clamp(19px,2.05vw,34px)!important;
+  line-height:1.36!important;letter-spacing:.01em!important;padding:0 .2em!important;
+  max-height:76dvh!important;overflow:hidden!important;overflow-wrap:normal!important;word-break:normal!important;
+}
+@media(max-width:760px){
+  .game3-lore-copy{max-height:76dvh!important;width:96vw!important;overflow:hidden!important}
+  .game3-lore-verse{font-size:clamp(16px,3.55vw,24px)!important;line-height:1.34!important;max-height:72dvh!important}
+}
+@media(prefers-reduced-motion:reduce){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite,
+  body.jumpscare-active .screen-backdrop,
+  body.jumpscare-active .tv-frame,
+  body.jumpscare-active .screen-glass{animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+
+/* REVISIONE 04/11/2026 — alternanza jumpscare controllata e manifestazione della lore. */
+/* Alternanza breve e limitata: evita strobo continui, con pochi impulsi distanziati. */
+body.jumpscare-active .jumpscare-overlay::before{
+  animation:jump-foreground-tear-safe .42s steps(2,end) infinite!important;
+}
+body.jumpscare-active .jumpscare-overlay::after{
+  animation:jump-safe-pulse 4.14s steps(1,end) both!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+  animation:
+    jump-snap-closeup 4.14s cubic-bezier(.12,.78,.12,1) both,
+    jump-image-negative 1.85s steps(1,end) both!important;
+}
+body.jumpscare-active .screen-backdrop{
+  animation:jump-backdrop-controlled 4.14s steps(1,end) both!important;
+}
+@keyframes jump-image-negative{
+  0%,14%{filter:drop-shadow(0 0 22px rgba(255,112,20,.48)) contrast(1.08) saturate(1.12) invert(0)}
+  15%,23%{filter:drop-shadow(0 0 22px rgba(255,255,255,.35)) contrast(1.28) saturate(.85) invert(1)}
+  24%,48%{filter:drop-shadow(0 0 22px rgba(255,112,20,.48)) contrast(1.08) saturate(1.12) invert(0)}
+  49%,58%{filter:drop-shadow(0 0 22px rgba(255,255,255,.35)) contrast(1.28) saturate(.85) invert(1)}
+  59%,100%{filter:drop-shadow(0 0 22px rgba(255,112,20,.48)) contrast(1.08) saturate(1.12) invert(0)}
+}
+@keyframes jump-safe-pulse{
+  0%,9%,14%,26%,32%,44%,50%,62%,68%,100%{opacity:0;background:#000}
+  10%,13%{opacity:.48;background:#fff}
+  27%,31%{opacity:.64;background:#000}
+  45%,49%{opacity:.38;background:#fff}
+  63%,67%{opacity:.56;background:#000}
+}
+@keyframes jump-backdrop-controlled{
+  0%,9%{filter:url(#jumpDistort) saturate(2.3) contrast(1.55) brightness(.78)}
+  10%,14%{filter:url(#jumpDistort) invert(.72) saturate(2.6) contrast(1.9) brightness(.82)}
+  15%,26%{filter:url(#jumpDistort) saturate(3.6) contrast(2.2) brightness(.58)}
+  27%,31%{filter:url(#jumpDistort) invert(1) saturate(.35) contrast(1.7) brightness(.3)}
+  32%,44%{filter:url(#jumpDistort) saturate(3.2) contrast(2.1) brightness(.68)}
+  45%,50%{filter:url(#jumpDistort) invert(.78) saturate(2.2) contrast(1.8) brightness(.86)}
+  51%,62%{filter:url(#jumpDistort) saturate(3.5) contrast(2.15) brightness(.62)}
+  63%,67%{filter:url(#jumpDistort) invert(1) saturate(.2) contrast(1.8) brightness(.28)}
+  68%,100%{filter:url(#jumpDistort) saturate(3.3) contrast(2.1) brightness(.65)}
+}
+@keyframes jump-foreground-tear-safe{
+  0%,100%{transform:translateX(0) skewX(0);opacity:.30}
+  25%{transform:translateX(-6px) skewX(.8deg);opacity:.52}
+  50%{transform:translateX(7px) skewX(-.7deg);opacity:.34}
+  75%{transform:translateX(-3px) skewX(.5deg);opacity:.48}
+}
+
+/* Il fondale della Zona Ombra vibra mentre si manifesta; si ferma quando è saturo. */
+.game3-lore-screen.lore-manifesting .game3-lore-background{
+  animation:lore-background-haunt .34s steps(2,end) infinite!important;
+  will-change:transform,filter,opacity!important;
+}
+@keyframes lore-background-haunt{
+  0%,100%{transform:translate3d(0,0,0) scale(1.055) rotate(0)}
+  25%{transform:translate3d(-5px,2px,0) scale(1.058) rotate(-.12deg)}
+  50%{transform:translate3d(4px,-2px,0) scale(1.061) rotate(.10deg)}
+  75%{transform:translate3d(-3px,-1px,0) scale(1.057) rotate(-.08deg)}
+}
+.game3-lore-screen.lore-suspense .game3-lore-background{
+  animation:lore-silent-anticipation 5.6s ease-in-out both!important;
+}
+.game3-lore-verse.verse-final{
+  color:#a70f1b!important;
+  font-family:var(--display)!important;
+  font-size:clamp(26px,3.1vw,48px)!important;
+  letter-spacing:.08em!important;
+  font-weight:900!important;
+  text-transform:none!important;
+  text-shadow:0 2px 10px #000,0 0 20px rgba(167,15,27,.72),0 0 34px rgba(100,0,8,.45)!important;
+}
+@media(max-width:760px){
+  .game3-lore-verse.verse-final{font-size:clamp(22px,5.2vw,34px)!important}
+  @keyframes lore-background-haunt{
+    0%,100%{transform:translate3d(0,0,0) scale(1.045)}
+    25%{transform:translate3d(-3px,1px,0) scale(1.05)}
+    50%{transform:translate3d(3px,-1px,0) scale(1.055)}
+    75%{transform:translate3d(-2px,-1px,0) scale(1.05)}
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.jumpscare-active .jumpscare-overlay::before,
+  body.jumpscare-active .jumpscare-overlay::after,
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite,
+  body.jumpscare-active .screen-backdrop,
+  .game3-lore-screen.lore-manifesting .game3-lore-background{
+    animation-duration:.01ms!important;animation-iteration-count:1!important;
+  }
+}
+
+/* La manifestazione dello sfondo avanza con dissolvenze lente tra un verso e l'altro. */
+.game3-lore-background{
+  transition:opacity 2.35s ease, filter 2.35s ease!important;
+}
+
+
+/* REVISIONE — scelte in bianco, coerenti con il testo principale del sito. */
+body.credits-mode .credits-screen .credits-roll h2,
+body.credits-mode .credits-screen .credits-copy-block .story-copy,
+body.credits-mode .credits-screen .credits-copy-block .source-quote,
+body.credits-mode .credits-screen .credits-controls .action-button,
+body.credits-mode .credits-screen .credits-meta,
+body.credits-mode .credits-screen .credits-hint{
+  color:#f7f7f4!important;
+}
+body.credits-mode .credits-screen .credits-copy-block .story-copy,
+body.credits-mode .credits-screen .credits-copy-block .source-quote,
+body.credits-mode .credits-screen .credits-roll h2{
+  text-shadow:0 2px 10px rgba(0,0,0,.98),0 0 16px rgba(255,255,255,.10)!important;
+}
+body.credits-mode .credits-screen .credits-controls .action-button{
+  border-color:rgba(255,255,255,.58)!important;
+}
+body.credits-mode .credits-screen .credits-controls .action-button:hover{
+  color:#080808!important;background:#f0f0ed!important;border-color:#fff!important;
+}
+
+/* JUMPSCARE: appare subito, vibra, impatta, diventa rosso e resta congelato. */
+body.jumpscare-active .screen-backdrop{
+  filter:url(#jumpDistort) grayscale(1) contrast(1.7) brightness(.20);
+  transform:scale(1.08);transform-origin:center!important;
+  animation:nextbot-background-collapse 4.14s ease-out both!important;
+  will-change:filter,transform!important;
+}
+body.jumpscare-active .tv-frame{
+  animation:nextbot-camera-impact 1.18s steps(2,end) both!important;
+  transform-origin:center!important;will-change:transform!important;
+}
+body.jumpscare-active .screen-glass{
+  animation:nextbot-glass-impact 1.12s steps(2,end) both!important;
+  overflow:visible!important;will-change:transform!important;
+}
+body.jumpscare-active .jumpscare-overlay{
+  display:block!important;position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
+  z-index:2147483000!important;overflow:hidden!important;background:transparent!important;pointer-events:none!important;isolation:isolate!important;
+}
+body.jumpscare-active .jumpscare-overlay::before{
+  content:""!important;position:absolute!important;inset:-3%!important;z-index:4!important;pointer-events:none!important;
+  opacity:.32!important;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.16) 0 1px,transparent 1px 4px),
+             repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 7px),
+             linear-gradient(90deg,transparent 0 45%,rgba(255,255,255,.12) 49%,transparent 54% 100%)!important;
+  mix-blend-mode:screen!important;animation:nextbot-static-tear .11s steps(2,end) infinite!important;
+}
+body.jumpscare-active .jumpscare-overlay::after{
+  content:""!important;position:absolute!important;inset:0!important;z-index:5!important;pointer-events:none!important;
+  opacity:0;background:#fff;animation:nextbot-single-flash 4.14s linear both!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+  display:block!important;position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+  width:auto!important;height:min(122dvh,1900px)!important;max-width:96vw!important;max-height:none!important;
+  object-fit:contain!important;object-position:center center!important;
+  transform:translate3d(-50%,-50%,0) scale(1.02);transform-origin:50% 50%!important;
+  opacity:1!important;visibility:visible!important;
+  filter:drop-shadow(0 0 26px rgba(235,145,36,.5)) contrast(1.18) saturate(1.2);
+  mix-blend-mode:normal!important;box-shadow:none!important;z-index:3!important;
+  animation:nextbot-face-sequence 4.14s cubic-bezier(.18,.78,.14,1) both!important;
+  will-change:transform,filter!important;
+}
+@keyframes nextbot-face-sequence{
+  /* Il volto è presente fin dal primo fotogramma e vibra durante il primo colpo. */
+  0%{transform:translate3d(-50%,-50%,0) scale(1.02) rotate(0deg);filter:drop-shadow(0 0 26px rgba(235,145,36,.5)) contrast(1.18) saturate(1.2)}
+  3%{transform:translate3d(calc(-50% - 13px),calc(-50% + 5px),0) scale(1.035) rotate(-1.25deg)}
+  6%{transform:translate3d(calc(-50% + 14px),calc(-50% - 6px),0) scale(1.045) rotate(1.35deg)}
+  9%{transform:translate3d(calc(-50% - 11px),calc(-50% - 2px),0) scale(1.06) rotate(-1.1deg)}
+  12%{transform:translate3d(calc(-50% + 9px),calc(-50% + 4px),0) scale(1.075) rotate(.9deg)}
+  16%{transform:translate3d(calc(-50% - 6px),calc(-50% - 2px),0) scale(1.09) rotate(-.6deg)}
+  /* Un solo scatto ravvicinato: poi il volto si blocca rosso, immobile. */
+  22%{transform:translate3d(-50%,-50%,0) scale(1.72) rotate(0);filter:contrast(1.45) saturate(1.45) brightness(1.08)}
+  28%{transform:translate3d(-50%,-50%,0) scale(1.92) rotate(0);filter:grayscale(1) sepia(1) saturate(14) hue-rotate(-52deg) contrast(1.65) brightness(.92) drop-shadow(0 0 52px rgba(255,0,0,.55))}
+  31%,100%{transform:translate3d(-50%,-50%,0) scale(1.92) rotate(0);filter:grayscale(1) sepia(1) saturate(14) hue-rotate(-52deg) contrast(1.65) brightness(.92) drop-shadow(0 0 52px rgba(255,0,0,.55))}
+}
+@keyframes nextbot-camera-impact{
+  0%,5%{transform:translate3d(0,0,0) scale(1)}
+  14%{transform:translate3d(-12px,7px,0) scale(1.018)}
+  27%{transform:translate3d(14px,-8px,0) scale(1.026)}
+  40%{transform:translate3d(-9px,-5px,0) scale(1.02)}
+  55%{transform:translate3d(7px,5px,0) scale(1.014)}
+  72%{transform:translate3d(-4px,2px,0) scale(1.006)}
+  100%{transform:translate3d(0,0,0) scale(1)}
+}
+@keyframes nextbot-glass-impact{
+  0%,7%{transform:translate3d(0,0,0)}
+  18%{transform:translate3d(-7px,4px,0)}
+  32%{transform:translate3d(8px,-4px,0)}
+  46%{transform:translate3d(-5px,3px,0)}
+  62%{transform:translate3d(3px,-2px,0)}
+  100%{transform:translate3d(0,0,0)}
+}
+@keyframes nextbot-background-collapse{
+  0%,18%{filter:url(#jumpDistort) grayscale(.2) contrast(1.5) brightness(.72);transform:scale(1.035)}
+  24%{filter:url(#jumpDistort) grayscale(.7) contrast(2) brightness(.42);transform:scale(1.10) skewX(1.2deg)}
+  32%{filter:grayscale(1) contrast(1.85) brightness(.18);transform:scale(1.075) skewX(-.8deg)}
+  100%{filter:grayscale(1) contrast(1.85) brightness(.18);transform:scale(1.075)}
+}
+@keyframes nextbot-static-tear{
+  0%,100%{transform:translate3d(0,0,0) skewX(0)}
+  25%{transform:translate3d(-5px,1px,0) skewX(.55deg)}
+  50%{transform:translate3d(4px,-2px,0) skewX(-.5deg)}
+  75%{transform:translate3d(-2px,1px,0) skewX(.3deg)}
+}
+/* Un unico flash breve all'impatto: meno di tre lampi in ogni secondo. */
+@keyframes nextbot-single-flash{
+  0%,4.2%,6.2%,100%{opacity:0;background:#fff}
+  4.8%{opacity:.58;background:#fff}
+}
+@media(max-width:760px){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{height:min(116dvh,1450px)!important;max-width:118vw!important}
+}
+@media(prefers-reduced-motion:reduce){
+  body.jumpscare-active .jumpscare-overlay::before{animation:none!important}
+  body.jumpscare-active .jumpscare-overlay::after{animation:none!important}
+  body.jumpscare-active .tv-frame,body.jumpscare-active .screen-glass{animation:none!important}
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{animation:none!important;transform:translate3d(-50%,-50%,0) scale(1.9)!important;filter:grayscale(1) sepia(1) saturate(14) hue-rotate(-52deg) contrast(1.65) brightness(.92)!important}
+  body.jumpscare-active .screen-backdrop{animation:none!important;filter:grayscale(1) contrast(1.85) brightness(.18)!important}
+}
+
+/* La lore occupa davvero il centro del viewport: un verso alla volta, sempre centrato. */
+.game3-lore-screen{display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important}
+.game3-lore-copy{
+  position:absolute!important;inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  margin:0!important;padding:clamp(18px,7vw,110px)!important;overflow:hidden!important;
+  text-align:center!important;background:transparent!important;border:0!important;box-shadow:none!important;
+}
+.game3-lore-verse{
+  display:block!important;width:min(1280px,86vw)!important;max-width:1280px!important;max-height:78dvh!important;
+  margin:0 auto!important;padding:0!important;text-align:center!important;text-wrap:balance!important;
+  line-height:1.42!important;overflow:visible!important;overflow-wrap:normal!important;word-break:normal!important;
+}
+/* La causa del mancato tremolio era il transform:scale(...) !important nella regola base dell'immagine. */
+.game3-lore-background{transform:scale(1.08);will-change:transform,opacity,filter!important}
+.game3-lore-screen.lore-manifesting .game3-lore-background{
+  animation:lore-background-haunt-fixed .19s steps(2,end) infinite!important;
+}
+@keyframes lore-background-haunt-fixed{
+  0%,100%{transform:translate3d(0,0,0) scale(1.075) rotate(0)}
+  25%{transform:translate3d(-12px,5px,0) scale(1.09) rotate(-.18deg)}
+  50%{transform:translate3d(10px,-6px,0) scale(1.095) rotate(.16deg)}
+  75%{transform:translate3d(-8px,-3px,0) scale(1.085) rotate(-.12deg)}
+}
+.game3-lore-screen.lore-suspense .game3-lore-background{
+  animation:lore-silent-anticipation 5.6s ease-in-out both!important;
+}
+@media(max-width:760px){
+  .game3-lore-copy{padding:18px 7vw!important}
+  .game3-lore-verse{width:88vw!important;max-width:88vw!important;font-size:clamp(17px,4.1vw,27px)!important;line-height:1.42!important}
+  @keyframes lore-background-haunt-fixed{
+    0%,100%{transform:translate3d(0,0,0) scale(1.055)}
+    25%{transform:translate3d(-6px,3px,0) scale(1.07)}
+    50%{transform:translate3d(6px,-3px,0) scale(1.075)}
+    75%{transform:translate3d(-4px,-2px,0) scale(1.065)}
+  }
+}
+
+/* Gerarchia tipografica dei regolamenti aggiornati */
+.briefing-document p{margin:0 0 .42em;white-space:pre-wrap;line-height:1.64}
+.briefing-document p:last-child{margin-bottom:0}
+.briefing-document .briefing-section-title{margin:.82em 0 .36em;padding-bottom:.38em;border-bottom:1px solid rgba(183,43,45,.42);color:#d9d7cc;font-family:var(--display);font-size:clamp(18px,2vw,24px);font-weight:400;letter-spacing:.055em;text-transform:uppercase}
+.briefing-document .briefing-section-title:first-child{margin-top:0}
+.briefing-document .briefing-subsection-title{margin:.65em 0 .26em;color:#c9c5b8;font-family:var(--display);font-size:clamp(15px,1.5vw,19px);font-weight:400}
+.briefing-document em{color:#d9d7cc}
+
+/* Rifinitura richiesta: spazi singoli tra paragrafi e titoli gioco senza pannello. */
+.story-copy + .story-copy{margin-top:.38em!important}
+.credits-copy-block .story-copy{margin:0 auto 10px!important;line-height:1.72!important}
+.credits-copy-block .source-quote{margin:12px auto 8px!important}
+.briefing-document p{margin:0 0 .42em!important;line-height:1.64!important}
+.briefing-document .briefing-section-title{margin:.82em 0 .36em!important}
+.briefing-document .briefing-subsection-title{margin:.65em 0 .26em!important}
+.game-intro-screen{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}
+.game-intro-sprite{background:transparent!important;box-shadow:none!important}
+
+
+/* REGOLAMENTI: un solo documento continuo, scorribile con mouse e touch. */
+.briefing-station{
+  width:min(1240px,100%)!important;
+  height:100%!important;
+  max-height:100%!important;
+  min-height:0!important;
+  padding:clamp(12px,2vw,26px)!important;
+  gap:clamp(9px,1.4vh,15px)!important;
+  overflow:hidden!important;
+}
+.briefing-heading{
+  min-height:0!important;
+  flex:0 0 auto!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:2px 0!important;
+}
+.briefing-title-wrap{width:100%!important;min-width:0!important;text-align:center!important}
+.briefing-kicker{
+  margin:0 0 5px!important;
+  color:#aaa79d!important;
+  font:600 clamp(9px,1vw,11px)/1.2 var(--type)!important;
+  letter-spacing:.2em!important;
+}
+.briefing-heading h2{
+  width:100%!important;
+  margin:0!important;
+  color:#f0eee6!important;
+  font-family:var(--display)!important;
+  font-size:clamp(22px,3.2vw,39px)!important;
+  font-weight:700!important;
+  line-height:1.13!important;
+  letter-spacing:.015em!important;
+  text-align:center!important;
+  text-wrap:balance!important;
+  overflow-wrap:break-word!important;
+  hyphens:auto!important;
+}
+.briefing-document{
+  display:block!important;
+  flex:1 1 auto!important;
+  min-height:0!important;
+  width:100%!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior:contain!important;
+  touch-action:pan-y!important;
+  padding:clamp(14px,2.2vw,28px)!important;
+  border:1px solid rgba(220,215,200,.14)!important;
+  border-radius:2px!important;
+  background:rgba(0,0,0,.32)!important;
+  scrollbar-width:thin!important;
+  scrollbar-color:#77736a transparent!important;
+  scroll-behavior:smooth!important;
+}
+.briefing-document p{
+  max-width:92ch!important;
+  margin:0 auto .72em!important;
+  color:#e2dfd5!important;
+  font-family:var(--type)!important;
+  font-size:clamp(14px,1.22vw,17px)!important;
+  font-weight:500!important;
+  line-height:1.68!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-shadow:0 1px 3px #000!important;
+}
+.briefing-document p:last-child{margin-bottom:0!important}
+.briefing-document .briefing-section-title{
+  margin:1.05em auto .45em!important;
+  padding:0!important;
+  border:0!important;
+  color:#e5e1d6!important;
+  font-family:var(--display)!important;
+  font-size:clamp(19px,2.1vw,26px)!important;
+  font-weight:700!important;
+  line-height:1.2!important;
+  letter-spacing:.035em!important;
+  text-transform:uppercase!important;
+  text-shadow:0 1px 6px #000!important;
+}
+.briefing-document .briefing-section-title:first-child{margin-top:0!important}
+.briefing-document .briefing-subsection-title{
+  margin:.78em auto .32em!important;
+  color:#d5d0c4!important;
+  font-family:var(--display)!important;
+  font-size:clamp(16px,1.6vw,20px)!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+}
+.briefing-document em{color:#eee9db!important}
+.briefing-controls{
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  flex:0 0 auto!important;
+  padding-top:2px!important;
+}
+.briefing-controls .action-button{width:min(220px,100%)!important;min-height:42px!important}
+
+/* TITOLI DEI GIOCHI: gerarchia più chiara e proporzionata anche su mobile. */
+.game-intro-screen{
+  gap:clamp(14px,3vh,28px)!important;
+  padding:clamp(12px,3vw,34px)!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  animation-duration:4.35s!important;
+}
+.game-intro-label{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:.16em!important;
+  width:min(1120px,96%)!important;
+  max-width:96%!important;
+  margin:0!important;
+  padding:0!important;
+  color:#e7e3d8!important;
+  font-family:var(--display)!important;
+  font-size:clamp(22px,3.4vw,43px)!important;
+  font-weight:700!important;
+  line-height:1.12!important;
+  letter-spacing:.025em!important;
+  text-align:center!important;
+  text-wrap:balance!important;
+  overflow-wrap:break-word!important;
+  text-shadow:0 2px 9px #000,0 0 16px rgba(0,0,0,.8)!important;
+  animation-duration:4.35s!important;
+}
+.game-intro-prefix{font-size:.48em!important;letter-spacing:.22em!important;color:#bcb8ae!important;text-transform:uppercase!important}
+.game-intro-name{display:block!important;max-width:100%!important}
+.game-intro-sprite{
+  max-width:min(66vw,790px)!important;
+  max-height:min(42vh,400px)!important;
+  object-fit:contain!important;
+  animation-duration:4.35s!important;
+}
+
+/* JUMPSCARE A STRATI: fondale dedicato, mostro in primo piano e monitor fullscreen. */
+body.jumpscare-active{overflow:hidden!important;background:#000!important;}
+body.jumpscare-active .tv-frame{
+  animation:pl-jump-frame-snap .42s steps(2,end) both!important;
+  transform-origin:center center!important;
+  will-change:transform!important;
+}
+body.jumpscare-active .screen-glass{
+  overflow:hidden!important;
+  animation:pl-jump-glass-shock .34s steps(2,end) 2 both!important;
+  will-change:transform!important;
+}
+body.jumpscare-active .screen-backdrop{
+  filter:grayscale(1) contrast(1.8) brightness(.22)!important;
+  transform:scale(1.035)!important;
+  animation:pl-jump-site-collapse .72s steps(2,end) both!important;
+}
+body.jumpscare-active .jumpscare-overlay{
+  display:block!important;
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  height:100dvh!important;
+  z-index:2147483000!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+  pointer-events:none!important;
+  background-color:#030202!important;
+  background-image:
+    linear-gradient(180deg,rgba(0,0,0,.16),rgba(0,0,0,.34)),
+    radial-gradient(ellipse at 50% 48%,transparent 25%,rgba(0,0,0,.55) 100%),
+    url("../assets/img/Jumpscare_bg.gif")!important;
+  background-position:center!important;
+  background-size:cover!important;
+  background-repeat:no-repeat!important;
+  border:0!important;
+  border-radius:0!important;
+  opacity:1!important;
+  transform:none!important;
+  animation:pl-jump-background-flicker 4.14s steps(2,end) both!important;
+}
+body.jumpscare-active .jumpscare-overlay::before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:-2%!important;
+  z-index:4!important;
+  pointer-events:none!important;
+  opacity:.38!important;
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.13) 0 1px,transparent 1px 4px),
+    repeating-linear-gradient(90deg,rgba(255,20,30,.10) 0 1px,transparent 1px 8px),
+    linear-gradient(90deg,transparent 0 47%,rgba(255,255,255,.18) 50%,transparent 53% 100%)!important;
+  mix-blend-mode:screen!important;
+  animation:pl-jump-static .075s steps(2,end) infinite!important;
+}
+body.jumpscare-active .jumpscare-overlay::after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:6!important;
+  pointer-events:none!important;
+  opacity:0!important;
+  background:#000!important;
+  animation:pl-jump-red-to-black 4.14s linear both!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+  display:block!important;
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:auto!important;
+  height:min(96dvh,1320px)!important;
+  max-width:92vw!important;
+  max-height:96dvh!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  margin:0!important;
+  padding:0!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:translate3d(-50%,-50%,0)!important;
+  transform-origin:center center!important;
+  filter:contrast(1.18) saturate(1.15) drop-shadow(4px 0 rgba(255,0,22,.7)) drop-shadow(-4px 0 rgba(0,190,255,.52))!important;
+  mix-blend-mode:screen!important;
+  box-shadow:none!important;
+  border:0!important;
+  border-radius:0!important;
+  z-index:3!important;
+  animation:pl-jump-face-shock 4.14s steps(2,end) both!important;
+  will-change:transform,filter!important;
+}
+@keyframes pl-jump-frame-snap{
+  0%,100%{transform:translate3d(0,0,0)}
+  20%{transform:translate3d(-7px,3px,0)}
+  45%{transform:translate3d(8px,-4px,0)}
+  70%{transform:translate3d(-4px,2px,0)}
+}
+@keyframes pl-jump-glass-shock{
+  0%,100%{transform:translate3d(0,0,0)}
+  25%{transform:translate3d(-4px,2px,0)}
+  50%{transform:translate3d(5px,-3px,0)}
+  75%{transform:translate3d(-2px,1px,0)}
+}
+@keyframes pl-jump-site-collapse{
+  0%{filter:grayscale(.35) contrast(1.2) brightness(.8);transform:scale(1)}
+  30%{filter:grayscale(1) contrast(2) brightness(.14);transform:scale(1.08) skewX(1deg)}
+  100%{filter:grayscale(1) contrast(2) brightness(.12);transform:scale(1.1) skewX(-.5deg)}
+}
+@keyframes pl-jump-background-flicker{
+  0%,5%,10%,100%{filter:brightness(.72) contrast(1.2)}
+  6%,8%{filter:brightness(1.12) contrast(1.4)}
+  14%,100%{filter:brightness(.64) contrast(1.35)}
+}
+@keyframes pl-jump-static{
+  0%,100%{transform:translate3d(0,0,0) skewX(0);opacity:.3}
+  25%{transform:translate3d(-4px,1px,0) skewX(.35deg);opacity:.52}
+  50%{transform:translate3d(4px,-2px,0) skewX(-.3deg);opacity:.34}
+  75%{transform:translate3d(-2px,1px,0) skewX(.2deg);opacity:.48}
+}
+@keyframes pl-jump-face-shock{
+  0%,100%{transform:translate3d(-50%,-50%,0) scale(1) rotate(0deg)}
+  4%{transform:translate3d(calc(-50% - 10px),calc(-50% + 4px),0) scaleX(1.02) scaleY(.99) rotate(-.65deg)}
+  8%{transform:translate3d(calc(-50% + 12px),calc(-50% - 5px),0) scaleX(.99) scaleY(1.025) rotate(.7deg)}
+  12%{transform:translate3d(calc(-50% - 8px),calc(-50% + 2px),0) scaleX(1.025) scaleY(1.015) rotate(-.5deg)}
+  16%{transform:translate3d(calc(-50% + 7px),calc(-50% - 3px),0) scaleX(1.015) scaleY(1.035) rotate(.35deg)}
+  22%{transform:translate3d(calc(-50% - 5px),calc(-50% + 1px),0) scaleX(1.035) scaleY(1.02) rotate(-.25deg)}
+  30%{transform:translate3d(calc(-50% + 4px),calc(-50% - 2px),0) scaleX(1.02) scaleY(1.04) rotate(.2deg)}
+  40%,82%{transform:translate3d(-50%,-50%,0) scale(1.015) rotate(0deg)}
+  86%,100%{transform:translate3d(-50%,-50%,0) scale(1.015) rotate(0deg)}
+}
+@keyframes pl-jump-red-to-black{
+  0%,82%{opacity:0;background:#000}
+  86%{opacity:.92;background:#a00013}
+  90%{opacity:.78;background:#72000d}
+  95%{opacity:.55;background:#230006}
+  100%{opacity:1;background:#000}
+}
+@media(max-width:760px){
+  .briefing-station{padding:9px!important;gap:8px!important}
+  .briefing-heading h2{font-size:clamp(20px,5.8vw,30px)!important;line-height:1.14!important}
+  .briefing-document{padding:12px!important}
+  .briefing-document p{font-size:14px!important;line-height:1.62!important;margin-bottom:.68em!important}
+  .briefing-document .briefing-section-title{font-size:clamp(18px,5vw,23px)!important;margin-top:.95em!important}
+  .briefing-document .briefing-subsection-title{font-size:clamp(15px,4.2vw,18px)!important}
+  .briefing-controls .action-button{width:min(200px,100%)!important}
+  .game-intro-screen{gap:12px!important}
+  .game-intro-label{font-size:clamp(21px,5.5vw,32px)!important;width:96%!important}
+  .game-intro-sprite{max-width:82vw!important;max-height:34vh!important}
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{height:min(90dvh,1050px)!important;max-width:94vw!important;max-height:90dvh!important}
+}
+@media(prefers-reduced-motion:reduce){
+  body.jumpscare-active .tv-frame,
+  body.jumpscare-active .screen-glass,
+  body.jumpscare-active .screen-backdrop,
+  body.jumpscare-active .jumpscare-overlay::before,
+  body.jumpscare-active .jumpscare-overlay::after,
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+
+
+/* REVISIONE MIRATA — jumpscare leggibile e coerente, audio/testi gestiti da JS. */
+.briefing-document .briefing-section-title,
+.briefing-document .briefing-subsection-title{
+  display:block!important;
+  width:100%!important;
+  text-align:center!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+/* Il fondale viene caricato come immagine reale, sopra il nero dell'overlay:
+   non dipende più da un background CSS che poteva risultare quasi invisibile. */
+.jumpscare-background{display:none}
+body.jumpscare-active .jumpscare-overlay{
+  display:block!important;
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  height:100dvh!important;
+  overflow:hidden!important;
+  z-index:2147483000!important;
+  isolation:isolate!important;
+  background:#050304!important;
+  background-image:none!important;
+  opacity:1!important;
+  transform:none!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-background{
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  height:100dvh!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  opacity:.98!important;
+  filter:brightness(4.2) contrast(1.38) saturate(1.55) sepia(.25)!important;
+  mix-blend-mode:screen!important;
+  pointer-events:none!important;
+  animation:none!important;
+}
+body.jumpscare-active .jumpscare-overlay::before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:4!important;
+  opacity:.26!important;
+  pointer-events:none!important;
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.10) 0 1px,transparent 1px 4px),
+    radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.28) 100%)!important;
+  mix-blend-mode:screen!important;
+  animation:pl-jump-static-fast .065s steps(2,end) infinite!important;
+}
+body.jumpscare-active .jumpscare-overlay::after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:6!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  background:#000!important;
+  animation:pl-jump-final-red-black 4.14s linear both!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:3!important;
+  width:100vw!important;
+  height:100vh!important;
+  height:100dvh!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center 39%!important;
+  margin:0!important;
+  padding:0!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+  transform-origin:center!important;
+  filter:grayscale(.12) sepia(.48) saturate(1.9) contrast(1.62) brightness(1.12)!important;
+  mix-blend-mode:normal!important;
+  box-shadow:none!important;
+  border:0!important;
+  border-radius:0!important;
+  animation:
+    pl-jump-violent-tremor .055s steps(2,end) infinite,
+    pl-jump-spectral-negative .72s steps(1,end) infinite!important;
+  will-change:transform,filter!important;
+}
+@keyframes pl-jump-violent-tremor{
+  0%,100%{transform:translate3d(-10px,5px,0) rotate(-.45deg) scale(1.025)}
+  25%{transform:translate3d(12px,-7px,0) rotate(.55deg) scale(1.035)}
+  50%{transform:translate3d(-8px,-5px,0) rotate(-.35deg) scale(1.02)}
+  75%{transform:translate3d(9px,6px,0) rotate(.42deg) scale(1.04)}
+}
+@keyframes pl-jump-spectral-negative{
+  0%,49%{filter:grayscale(.12) sepia(.48) saturate(1.9) contrast(1.62) brightness(1.12)}
+  50%,100%{filter:invert(1) grayscale(.35) sepia(.18) saturate(.62) contrast(1.75) brightness(.98)}
+}
+@keyframes pl-jump-static-fast{
+  0%,100%{transform:translate3d(0,0,0) skewX(0);opacity:.2}
+  25%{transform:translate3d(-4px,1px,0) skewX(.25deg);opacity:.34}
+  50%{transform:translate3d(4px,-2px,0) skewX(-.22deg);opacity:.22}
+  75%{transform:translate3d(-2px,1px,0) skewX(.16deg);opacity:.32}
+}
+@keyframes pl-jump-final-red-black{
+  0%,82%{opacity:0;background:#000}
+  86%{opacity:.92;background:#a00013}
+  91%{opacity:.82;background:#72000d}
+  96%{opacity:.62;background:#250006}
+  100%{opacity:1;background:#000}
+}
+@media(max-width:760px){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+    width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;
+    object-fit:cover!important;object-position:center 39%!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite,
+  body.jumpscare-active .jumpscare-overlay .jumpscare-background,
+  body.jumpscare-active .jumpscare-overlay::before{
+    animation-duration:.4s!important;animation-iteration-count:1!important;
+  }
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+    transform:none!important;filter:grayscale(.12) sepia(.48) saturate(1.9) contrast(1.62) brightness(1.12)!important;
+  }
+}
+
+
+/* CORREZIONE MIRATA — mostro interamente visibile e regolamenti centrati. */
+body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:94vw!important;
+  max-height:94dvh!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  transform:translate3d(-50%,-50%,0)!important;
+  transform-origin:center center!important;
+  animation:pl-jump-contained-tremor .055s steps(2,end) infinite,
+            pl-jump-spectral-negative .72s steps(1,end) infinite!important;
+}
+@keyframes pl-jump-contained-tremor{
+  0%,100%{transform:translate3d(calc(-50% - 2px),calc(-50% + 1px),0) rotate(-.12deg)}
+  25%{transform:translate3d(calc(-50% + 2px),calc(-50% - 1px),0) rotate(.14deg)}
+  50%{transform:translate3d(calc(-50% - 1px),calc(-50% - 2px),0) rotate(-.1deg)}
+  75%{transform:translate3d(calc(-50% + 1px),calc(-50% + 2px),0) rotate(.11deg)}
+}
+.briefing-document,
+.briefing-document p,
+.briefing-document .briefing-section-title,
+.briefing-document .briefing-subsection-title{
+  text-align:center!important;
+}
+.briefing-document p{
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+@media(max-width:760px){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+    max-width:92vw!important;
+    max-height:90dvh!important;
+  }
+}
+
+/* REVISIONE FINALE — soggetto jumpscare in primo piano, tremore ad alta frequenza,
+   alternanza saturo/negativo SOLO sul PNG e scie ghosting senza bordi RGB. */
+.jumpscare-echo{display:none!important}
+body.jumpscare-active .jumpscare-overlay{
+  overflow:hidden!important;
+  isolation:isolate!important;
+  background:#050304!important;
+  background-image:none!important;
+  animation:none!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-background{
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  opacity:1!important;
+  filter:brightness(.88) contrast(1.12) saturate(.92)!important;
+  mix-blend-mode:normal!important;
+  animation:none!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-echo{
+  display:block!important;
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  z-index:2!important;
+  width:min(92vw,1180px)!important;
+  height:min(94dvh,1180px)!important;
+  max-width:94vw!important;
+  max-height:94dvh!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  pointer-events:none!important;
+  mix-blend-mode:screen!important;
+  will-change:transform,opacity,filter!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-echo--far{
+  opacity:.13!important;
+  filter:blur(4px) grayscale(.25) sepia(.22) brightness(1.22)!important;
+  animation:pl-jump-echo-far .083s steps(2,end) infinite!important;
+  animation-delay:-.041s!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-echo--near{
+  opacity:.20!important;
+  filter:blur(1.8px) grayscale(.12) sepia(.28) brightness(1.12)!important;
+  animation:pl-jump-echo-near .061s steps(2,end) infinite!important;
+  animation-delay:-.026s!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+  display:block!important;
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  z-index:3!important;
+  width:min(92vw,1180px)!important;
+  height:min(94dvh,1180px)!important;
+  max-width:94vw!important;
+  max-height:94dvh!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  margin:0!important;
+  padding:0!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:translate3d(-50%,-50%,0)!important;
+  transform-origin:center center!important;
+  filter:saturate(2.25) contrast(1.42) brightness(1.12)!important;
+  mix-blend-mode:normal!important;
+  box-shadow:none!important;
+  border:0!important;
+  border-radius:0!important;
+  animation:pl-jump-main-tremor .034s steps(2,end) infinite,
+            pl-jump-main-flash .16s steps(1,end) infinite!important;
+  will-change:transform,filter!important;
+}
+@keyframes pl-jump-main-tremor{
+  0%,100%{transform:translate3d(calc(-50% - 4px),calc(-50% + 2px),0) rotate(-.28deg)}
+  20%{transform:translate3d(calc(-50% + 5px),calc(-50% - 3px),0) rotate(.34deg)}
+  40%{transform:translate3d(calc(-50% - 3px),calc(-50% - 2px),0) rotate(-.24deg)}
+  60%{transform:translate3d(calc(-50% + 4px),calc(-50% + 3px),0) rotate(.3deg)}
+  80%{transform:translate3d(calc(-50% - 5px),calc(-50% + 1px),0) rotate(-.32deg)}
+}
+@keyframes pl-jump-main-flash{
+  0%,49.9%{filter:saturate(2.25) contrast(1.42) brightness(1.12) sepia(.12)}
+  50%,100%{filter:invert(1) saturate(1.28) contrast(1.62) brightness(.94)}
+}
+@keyframes pl-jump-echo-far{
+  0%,100%{transform:translate3d(calc(-50% + 17px),calc(-50% - 8px),0) scale(1.018)}
+  50%{transform:translate3d(calc(-50% - 13px),calc(-50% + 7px),0) scale(1.025)}
+}
+@keyframes pl-jump-echo-near{
+  0%,100%{transform:translate3d(calc(-50% - 11px),calc(-50% + 5px),0) scale(1.012)}
+  50%{transform:translate3d(calc(-50% + 9px),calc(-50% - 5px),0) scale(1.02)}
+}
+
+/* Rifiniture responsive: safe-area, viewport dinamico, touch e orientamento landscape. */
+html{min-height:100%;-webkit-text-size-adjust:100%;}
+@media(max-width:760px){
+  body:not(.jumpscare-active){
+    min-height:100dvh!important;
+    padding:max(4px,env(safe-area-inset-top)) max(4px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(4px,env(safe-area-inset-left))!important;
+  }
+  .tv-frame{
+    width:100%!important;
+    height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 8px)!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+  .screen-glass,.app-shell,.scene{min-width:0!important;min-height:0!important;}
+  .scene{
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior:contain!important;
+    touch-action:pan-y!important;
+  }
+  .archive-card,.briefing-station,.briefing-document,.credits-roll,.game3-lore-copy{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+  .briefing-document{
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-y!important;
+    overscroll-behavior:contain!important;
+  }
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite,
+  body.jumpscare-active .jumpscare-overlay .jumpscare-echo{
+    width:min(94vw,900px)!important;
+    height:min(92dvh,1050px)!important;
+    max-width:94vw!important;
+    max-height:92dvh!important;
+  }
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{animation-duration:.034s,.16s!important;}
+  body.jumpscare-active .jumpscare-overlay .jumpscare-echo--far{animation-duration:.083s!important;}
+  body.jumpscare-active .jumpscare-overlay .jumpscare-echo--near{animation-duration:.061s!important;}
+}
+@media(max-width:390px){
+  .hud{gap:4px!important;padding-inline:5px!important;}
+  .hud-brand strong{font-size:clamp(7px,2.4vw,9px)!important;}
+  .hud-readout{font-size:9px!important;gap:4px!important;}
+  .audio-toggle{font-size:7px!important;padding:5px 4px!important;}
+  .scene{padding:6px!important;}
+  .archive-card{padding:16px 12px!important;}
+  .story-copy{font-size:12px!important;line-height:1.58!important;}
+  .action-button{max-width:100%;}
+}
+@media(orientation:landscape) and (max-height:520px){
+  body:not(.jumpscare-active){padding:4px!important;}
+  .tv-frame{height:calc(100dvh - 8px)!important;min-height:0!important;}
+  .hud{height:42px!important;min-height:42px!important;}
+  .scene{padding:6px!important;}
+  .system-footer{height:24px!important;min-height:24px!important;}
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite,
+  body.jumpscare-active .jumpscare-overlay .jumpscare-echo{
+    height:88dvh!important;
+    max-height:88dvh!important;
+    width:min(92vw,1050px)!important;
+    max-width:92vw!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+    animation:pl-jump-main-tremor .12s steps(2,end) 1,
+              pl-jump-main-flash .65s steps(1,end) 3!important;
+  }
+  body.jumpscare-active .jumpscare-overlay .jumpscare-echo{animation:none!important;opacity:.08!important;}
+}
+
+/* ADATTAMENTO DESKTOP E TABLET — mantiene il layout TV originale su PC,
+   e ridimensiona gli spazi solo quando viewport o altezza diventano ridotti. */
+@media (min-width: 761px) and (max-width: 1100px) {
+  body:not(.jumpscare-active) {
+    padding: 12px !important;
+  }
+  .tv-frame {
+    width: min(100%, 1180px) !important;
+    height: min(880px, calc(100dvh - 24px)) !important;
+    min-height: min(580px, calc(100dvh - 24px)) !important;
+  }
+  .hud {
+    gap: 12px !important;
+    padding-inline: clamp(12px, 2vw, 24px) !important;
+  }
+  .hud-brand { min-width: 0 !important; }
+  .hud-readout { gap: 10px !important; }
+  .scene { padding: clamp(14px, 2vw, 28px) !important; }
+  .archive-card,
+  .briefing-station,
+  .credits-roll,
+  .game3-lore-copy {
+    width: min(100%, 900px) !important;
+    max-width: 100% !important;
+  }
+  .game-intro-sprite {
+    max-width: min(76vw, 780px) !important;
+    max-height: 48vh !important;
+  }
+}
+
+/* PC e portatili con finestre basse: evita che l'altezza minima del televisore
+   provochi overflow verticale quando la finestra del browser è poco alta. */
+@media (min-width: 761px) and (max-height: 720px) {
+  body:not(.jumpscare-active) { padding: 8px !important; }
+  .tv-frame {
+    height: calc(100dvh - 16px) !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+  .hud { height: 56px !important; min-height: 56px !important; }
+  .scene { min-height: 0 !important; padding: 12px !important; }
+  .system-footer { height: 28px !important; min-height: 28px !important; }
+  .archive-card,
+  .briefing-station,
+  .briefing-document,
+  .credits-roll,
+  .game3-lore-copy { min-height: 0 !important; max-height: 100% !important; }
+}
+
+/* Display desktop ampi: il televisore resta centrato e leggibile, senza
+   trasformare il layout desktop in una versione mobile ingrandita. */
+@media (min-width: 1101px) {
+  .tv-frame {
+    width: min(1440px, calc(100vw - 36px));
+  }
+}
+
+
+/* CORREZIONE DEFINITIVA JUMPSCARE — tremore e inversione su ENTRAMBE le immagini.
+   Il PNG resta un soggetto in primo piano, ingrandito e con proporzioni preservate. */
+body.jumpscare-active .jumpscare-overlay .jumpscare-background{
+  display:block!important;
+  position:absolute!important;
+  inset:-2%!important;
+  z-index:0!important;
+  width:104%!important;
+  height:104%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  opacity:1!important;
+  transform:translate3d(0,0,0)!important;
+  transform-origin:center!important;
+  filter:brightness(.9) contrast(1.12) saturate(1.05)!important;
+  mix-blend-mode:normal!important;
+  animation:pl-jump-bg-violent-shake .032s steps(2,end) infinite,
+            pl-jump-both-negative-flash .16s steps(1,end) infinite!important;
+  will-change:transform,filter!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+  display:block!important;
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  z-index:3!important;
+  width:min(106vw,1450px)!important;
+  height:min(108dvh,1500px)!important;
+  max-width:106vw!important;
+  max-height:108dvh!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  margin:0!important;
+  padding:0!important;
+  opacity:1!important;
+  visibility:visible!important;
+  transform:translate3d(-50%,-50%,0)!important;
+  transform-origin:center!important;
+  filter:saturate(2.25) contrast(1.42) brightness(1.12)!important;
+  mix-blend-mode:normal!important;
+  box-shadow:none!important;
+  border:0!important;
+  border-radius:0!important;
+  animation:pl-jump-face-violent-shake .026s steps(2,end) infinite,
+            pl-jump-both-negative-flash .16s steps(1,end) infinite!important;
+  will-change:transform,filter!important;
+}
+body.jumpscare-active .jumpscare-overlay .jumpscare-echo{
+  width:min(96vw,1320px)!important;
+  height:min(98dvh,1380px)!important;
+  max-width:96vw!important;
+  max-height:98dvh!important;
+  object-fit:contain!important;
+}
+@keyframes pl-jump-bg-violent-shake{
+  0%,100%{transform:translate3d(-7px,4px,0) scale(1.025) skewX(-.15deg)}
+  20%{transform:translate3d(8px,-5px,0) scale(1.03) skewX(.2deg)}
+  40%{transform:translate3d(-6px,-4px,0) scale(1.02) skewX(-.18deg)}
+  60%{transform:translate3d(7px,5px,0) scale(1.035) skewX(.16deg)}
+  80%{transform:translate3d(-8px,2px,0) scale(1.025) skewX(-.12deg)}
+}
+@keyframes pl-jump-face-violent-shake{
+  0%,100%{transform:translate3d(calc(-50% - 6px),calc(-50% + 3px),0) rotate(-.32deg) scale(1.015)}
+  16%{transform:translate3d(calc(-50% + 7px),calc(-50% - 5px),0) rotate(.38deg) scale(1.025)}
+  32%{transform:translate3d(calc(-50% - 5px),calc(-50% - 4px),0) rotate(-.3deg) scale(1.018)}
+  48%{transform:translate3d(calc(-50% + 6px),calc(-50% + 4px),0) rotate(.34deg) scale(1.03)}
+  64%{transform:translate3d(calc(-50% - 7px),calc(-50% + 2px),0) rotate(-.36deg) scale(1.02)}
+  80%{transform:translate3d(calc(-50% + 5px),calc(-50% - 3px),0) rotate(.28deg) scale(1.026)}
+}
+@keyframes pl-jump-both-negative-flash{
+  0%,49.9%{filter:saturate(2.25) contrast(1.42) brightness(1.12) sepia(.12)}
+  50%,100%{filter:invert(1) saturate(1.28) contrast(1.62) brightness(.94)}
+}
+@media(max-width:760px){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+    width:102vw!important;height:102dvh!important;max-width:102vw!important;max-height:102dvh!important;
+  }
+  body.jumpscare-active .jumpscare-overlay .jumpscare-echo{
+    width:98vw!important;height:96dvh!important;max-width:98vw!important;max-height:96dvh!important;
+  }
+}
+@media(orientation:landscape) and (max-height:520px){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+    width:min(110vw,1250px)!important;height:106dvh!important;max-width:110vw!important;max-height:106dvh!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body.jumpscare-active .jumpscare-overlay .jumpscare-background,
+  body.jumpscare-active .jumpscare-overlay .jumpscare-sprite{
+    animation-duration:.12s,.24s!important;
+  }
+}
+
+
+/* SCORRIMENTO SCELTE — gestito da JS in base all'altezza realmente renderizzata.
+   Evita che l'animazione CSS percentuale termini prima del testo, specialmente su mobile. */
+.credits-window{
+  overflow:hidden!important;
+  scroll-behavior:auto!important;
+  overscroll-behavior:contain!important;
+}
+.credits-roll{
+  position:relative!important;
+  top:auto!important;
+  left:auto!important;
+  right:auto!important;
+  width:100%!important;
+  padding-left:13px!important;
+  padding-right:13px!important;
+  transform:translate3d(0,0,0)!important;
+  animation:none!important;
+  animation-play-state:running!important;
+  will-change:transform!important;
+}
+.credits-roll-end{display:block!important;width:100%!important;height:2px!important;min-height:2px!important;margin:0!important;padding:0!important;visibility:hidden!important;pointer-events:none!important;}
+@media(max-width:760px){
+  .credits-roll{padding-left:7px!important;padding-right:7px!important;}
+}

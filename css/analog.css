@@ -1,0 +1,16 @@
+/* Disturbo analogico monocromatico, leggero e non invasivo. */
+.crt-layer{position:absolute;inset:0;z-index:12;pointer-events:none}
+.scanlines{opacity:.11;background:repeating-linear-gradient(to bottom,transparent 0 3px,rgba(255,255,255,.1) 3px 4px);mix-blend-mode:screen}
+.film-grain{opacity:.035;background-image:radial-gradient(circle at 20% 30%,#fff 0 .5px,transparent .9px),radial-gradient(circle at 70% 60%,#fff 0 .5px,transparent 1px),radial-gradient(circle at 40% 80%,#fff 0 .5px,transparent 1px);background-size:13px 11px,19px 17px,7px 23px;animation:grain-wander .28s steps(3,end) infinite}
+.vignette{box-shadow:inset 0 0 80px 12px rgba(0,0,0,.5);opacity:.3}
+.tracking-band{position:absolute;z-index:13;pointer-events:none;left:0;right:0;top:61%;height:1px;background:rgba(255,255,255,.2);opacity:.12;animation:tracking 9s linear infinite}
+.screen-glass:after{content:"";position:absolute;inset:0;z-index:15;pointer-events:none;border-radius:inherit;background:linear-gradient(90deg,rgba(255,255,255,.015),transparent 15%,transparent 85%,rgba(255,255,255,.015))}
+body.credits-mode .scanlines{opacity:.07}
+body.horror-max .scanlines{opacity:.18}
+body.horror-max .film-grain{opacity:.07;animation-duration:.12s}
+body.horror-max .tracking-band{opacity:.28;animation-duration:2s}
+body.glitch-burst .screen-glass{animation:signal-jolt .2s steps(2,end)}
+body.signal-lost .scene{filter:contrast(1.3);opacity:.86}
+@keyframes grain-wander{0%{transform:translate(0,0)}25%{transform:translate(-.5%,.3%)}50%{transform:translate(.4%,-.3%)}75%{transform:translate(.2%,.5%)}100%{transform:translate(0,0)}}
+@keyframes tracking{0%{top:12%}33%{top:47%}66%{top:79%}100%{top:12%}}
+@keyframes signal-jolt{0%{transform:translateX(0)}25%{transform:translateX(-3px)}50%{transform:translateX(2px)}75%{transform:translateX(-1px)}100%{transform:translateX(0)}}
